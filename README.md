@@ -1,6 +1,8 @@
 # aws-cloud-infra-basic
 ## 목차
 * **[EC2 Instance 접속을 위한 PuTTY 사용 방법](#EC2-Instance-접속을-위한-PuTTY-사용-방법)**
+* **[서버리스 정적 웹사이트 호스팅 및 성능 가속화](#서버리스-정적-웹사이트-호스팅-및-성능-가속화)**
+  * **[아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토](#아키텍처-관련-기술/서비스/다이어그램/구현-순서-검토)**
 
 ## EC2 Instance 접속을 위한 PuTTY 사용 방법
 Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프로그램이 필요한데 PuTTY라는 프로그램을 사용한다.
@@ -33,3 +35,6 @@ Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프�
 ![image](https://user-images.githubusercontent.com/31242766/208665640-ea8e5c1d-f3ed-4b21-bfde-7298bb8c2570.png)
 - EC2 접속    
 ![image](https://user-images.githubusercontent.com/31242766/208665930-eaf66202-2565-4fff-b5a5-8d808e7ac791.png)
+
+## 서버리스 정적 웹사이트 호스팅 및 성능 가속화
+### 아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토
