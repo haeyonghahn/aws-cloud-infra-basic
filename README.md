@@ -47,13 +47,41 @@ Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프�
 
 ### S3 Bucket 생성 및 정적 웹사이트 호스팅
 1. S3 Bucket 생성
-2. Object(File) 업로드
-   - mycar.html
-   - car.jpg
-3. 정적 웹 사이트 호스팅 기능 활성화
-4. Bucket과 Object에 대한 액세스 정책 설정
-5. 웹 브라우저에서 웹 사이트 작동 확인
+   - 일반 구성    
+   ![image](https://user-images.githubusercontent.com/31242766/208670038-0de5b866-a2cf-44f2-b0ce-dd2e7ea81095.png)
+   - 객체 소유권, 이 버킷의 퍼블릭 액세스 차단 설정, 버킷 버전 관리
+   ![image](https://user-images.githubusercontent.com/31242766/208670254-1d73fd50-daae-4317-afaa-39d5df9a3792.png)
+   - 태그, 기본 암호화   
+   ![image](https://user-images.githubusercontent.com/31242766/208670329-a725ad9d-5744-4acd-8726-3166134f182a.png)
 
+3. Object(File) 업로드
+   - mycar.html
+   - car.jpg   
+   ![image](https://user-images.githubusercontent.com/31242766/208670969-87302a15-03b5-4684-8e69-6ef598e91c55.png)
+4. 정적 웹 사이트 호스팅 기능 활성화
+   - Amazon S3 -> 버킷 -> lab-s3-web-hosting-by-haeyong -> 정적 웹 사이트 호스팅 설정
+   ![image](https://user-images.githubusercontent.com/31242766/208671705-415a484e-3c9e-478a-84d4-09f48a883bbe.png)
+6. Bucket과 Object에 대한 액세스 정책 설정
+   - Amazon S3 -> 버킷 -> lab-s3-web-hosting-by-haeyong -> 퍼블릭 액세스 차단 편집(버킷 설정)
+   ![image](https://user-images.githubusercontent.com/31242766/208672859-f0ab481a-0a54-4d60-9d26-8cbc8186a93d.png)
+   - Amazon S3 -> 버킷 -> lab-s3-web-hosting-by-haeyong -> 버킷 정책 편집 -> 새 문 추가   
+   ![image](https://user-images.githubusercontent.com/31242766/208679819-6a9880eb-a5eb-4e5c-982d-48159e9d9ca6.png)    
+   - Amazon S3 -> 버킷 -> lab-s3-web-hosting-by-haeyong -> 버킷 정책 편집 -> 정책 생성기
+     - Select Type of Policy : S3 Bucket Policy
+     - Effect(접근하는 사람을 선택할 것인지 안선택할 것인지) : Allow
+       - Allow : 모두 허용
+       - Deny : 선택해서 받음
+     - Principal(접근할 수 있는 사람) : *
+       - "*" : 모두
+       - 접근할 수 있는 사람 명시 : 그 사람만
+     - Actions : GetObject
+     - Amazon Resource Name (ARN) (접근하고자 하는 S3의 버킷 ARN/경로) : arn:aws:s3:::lab-s3-web-hosting-by-haeyong/*
+     ![image](https://user-images.githubusercontent.com/31242766/208694873-36e5c2f5-5a94-44b1-9789-e66e7d5bb6df.png)
+     ![image](https://user-images.githubusercontent.com/31242766/208697131-d4b07b88-556d-42f5-8a30-97ad4feb7b51.png)
+     ![image](https://user-images.githubusercontent.com/31242766/208697333-7a4b0c37-da69-4939-835e-f61db542fdb5.png)
+7. 웹 브라우저에서 웹 사이트 작동 확인
+![image](https://user-images.githubusercontent.com/31242766/208697648-7eef353b-6ffa-4f28-b890-d260333b7fd7.png)
+![image](https://user-images.githubusercontent.com/31242766/208697709-1700858a-d24d-4c53-acb6-e1ba482ea0af.png)
 ### CloudFront를 통한 웹사이트 성능 가속화
 1. CloudFront Distribution 생성
    - Origin, Cache behavior 등 설정
