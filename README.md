@@ -131,7 +131,8 @@ __사용하는 AWS 서비스__
 
 ### 기본 네트워크 환경 구성 (VPC/Subnet/Internet Gateway/Route Table)
 ![image](https://user-images.githubusercontent.com/31242766/209810091-73af8f78-8b64-46e3-b742-0af10dbf1dee.png)
-1. VPC 생성
+1. VPC 생성   
+![image](https://user-images.githubusercontent.com/31242766/209882149-31fe2e2a-1ff6-4433-a499-bc78b965e121.png)
 2. Subnet 생성
 3. Internet Gateway 생성
 4. Route Table 생성 및 Route 설정
