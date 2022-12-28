@@ -83,8 +83,23 @@ Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프�
 ![image](https://user-images.githubusercontent.com/31242766/208697648-7eef353b-6ffa-4f28-b890-d260333b7fd7.png)
 ![image](https://user-images.githubusercontent.com/31242766/208697709-1700858a-d24d-4c53-acb6-e1ba482ea0af.png)
 ### CloudFront를 통한 웹사이트 성능 가속화
-1. CloudFront Distribution 생성
-   - Origin, Cache behavior 등 설정
+1. CloudFront Distribution 생성 (Origin, Cache behavior 등 설정)
+   - 원본
+   ![image](https://user-images.githubusercontent.com/31242766/209772674-ec9f08a4-fd2e-4ce7-8b7c-7e9c38aaea87.png)
+   ![image](https://user-images.githubusercontent.com/31242766/209772738-84c2c783-71ab-49d6-8e34-7dfa407fa316.png)
+   - 기본 캐시 동작
+   ![image](https://user-images.githubusercontent.com/31242766/209772915-24f37fce-dabd-4e41-9253-fe17f2338323.png)   
+     - Compress objects automatically (자동으로 객체 압축)
+       - origin에서 가져온 리소스롤 성능이나 속도를 높이기 위해 자동으로 압축하는 기능이다.
+   - 캐시 키 및 원본 요청   
+   캐시 키는 캐싱된 객체가 가지고 있는 고유 식별자. 키 값이다. 사용자의 요청에 의한 캐시 키와 이전 요청으로 생성되었던 캐시 키가 동일할 경우 `캐시 hit`라고 표현한다.
+   `캐시 hit`가 발생할 경우 해당 `Object`, `콘텐츠`가 CloudFront `edge location` 에서 최종 사용자에게 전달이 되기 때문에 `origin 서버`의 부하를 감소시킬 수 있고 
+   최종 사용자의 delay time을 줄일 수 있게 된다. 
+   ![image](https://user-images.githubusercontent.com/31242766/209773536-a22a1f38-b4d9-4832-9322-8e15c2a91bf6.png)
+   - 함수 연결 - 선택 사항   
+   ![image](https://user-images.githubusercontent.com/31242766/209775128-f67f3243-e1d9-4533-867e-d4083d5fcec4.png)
+   - 설정   
+   ![image](https://user-images.githubusercontent.com/31242766/209775582-58c27dda-ad1c-4746-a97d-c85802c874f8.png)
 2. 웹 브라우저에서 CloudFront Distribution 작동 확인
 3. 웹 사이트 성능 테스트
    - S3 정적 웹 사이트 호스팅을 통한 콘텐츠 로드 속도
