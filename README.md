@@ -7,6 +7,13 @@
   * **[CloudFront를 통한 웹사이트 성능 가속화](#CloudFront를-통한-웹사이트-성능-가속화)**
 * **[LAMP 웹 서버 및 Application Load Balancer 구성](#LAMP-웹-서버-및-Application-Load-Balancer-구성)**
   * **[아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토](#아키텍처-관련-기술서비스다이어그램구현-순서-검토-1)**
+  * **[기본 네트워크 환경 구성 (VPC/Subnet/Internet Gateway/Route Table)](#기본-네트워크-환경-구성-(VPC/Subnet/Internet-Gateway/Route-Table))**
+  * **[Public EC2 인스턴스 생성 및 LAMP 웹서버 구성](#Public-EC2-인스턴스-생성-및-LAMP-웹서버-구성)**
+  * **[Custom AMI를 통한 Public EC2 인스턴스 생성](#Custom-AMI를-통한-Public-EC2-인스턴스-생성)**
+  * **[EFS를 통한 네트워크 파일 시스템 구성](#EFS를-통한-네트워크-파일-시스템-구성)**
+  * **[Application Load Balancer를 통한 이중화 네트워크 구성 (1)](#Application-Load-Balancer를-통한-이중화-네트워크-구성-(1))**
+  * **[Bastion host와 NAT Gateway를 통한 Private EC2 인스턴스의 외부 통신 구성](#Bastion-host와-NAT-Gateway를-통한-Private-EC2-인스턴스의-외부-통신-구성)**
+  * **[Application Load Balancer를 통한 이중화 네트워크 구성 (2)](#Application-Load-Balancer를-통한-이중화-네트워크-구성-(2))**
 
 ## EC2 Instance 접속을 위한 PuTTY 사용 방법
 Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프로그램이 필요한데 PuTTY라는 프로그램을 사용한다.
@@ -119,3 +126,66 @@ __사용하는 AWS 서비스__
 - Amazon EBS
 - Amazon EFS
 - Elastic Load Balancer - Application Load Balancer
+
+![image](https://user-images.githubusercontent.com/31242766/209809858-b909c846-3ab1-493a-8094-b86ae39f23df.png)
+
+### 기본 네트워크 환경 구성 (VPC/Subnet/Internet Gateway/Route Table)
+![image](https://user-images.githubusercontent.com/31242766/209810091-73af8f78-8b64-46e3-b742-0af10dbf1dee.png)
+1. VPC 생성
+2. Subnet 생성
+3. Internet Gateway 생성
+4. Route Table 생성 및 Route 설정
+
+### Public EC2 인스턴스 생성 및 LAMP 웹서버 구성
+![image](https://user-images.githubusercontent.com/31242766/209810256-dd536659-cb46-4c38-9931-c436914facf2.png)
+1. EC2 생성
+- AMI
+- LAMP 웹 서버 구성 (Linux, Apache, MySQL, PHP)
+- Security Group
+- Storage(EBS)
+- Key pair
+2. Index.php 파일 생성
+3. 웹 브라우저에서 LAMP 웹 서버 작동 테스트
+
+### Custom AMI를 통한 Public EC2 인스턴스 생성
+![image](https://user-images.githubusercontent.com/31242766/209810557-84d0b07f-28a2-40cd-84ec-d3d417f582dc.png)
+1. Custom AMI 생성
+2. Custom AMI를 통해 EC2 추가 생성
+3. 웹 브라우저에서 LAMP 웹 서버 작동 테스트
+
+### EFS를 통한 네트워크 파일 시스템 구성
+![image](https://user-images.githubusercontent.com/31242766/209810645-9e6827b4-e033-4661-b663-3250263e043a.png)
+1. EFS용 Security Group 생성
+2. EFS 생성
+- Availability
+- Lifecycle
+- Performance/Throughput mode 
+- Network 등
+3. EFS-EC2 마운트
+4. 웹 브라우저를 통한 EFS 마운트 테스트
+
+### Application Load Balancer를 통한 이중화 네트워크 구성 (1)
+![image](https://user-images.githubusercontent.com/31242766/209810858-7ebf2ddd-b2aa-48c4-82ab-5cf893af2e4c.png)
+1. Target group 생성
+- Target type
+- Protocol/Port
+2. Application Load Balancer 구성
+- Scheme
+- Network
+- Security Group
+- Listener/Rule 등
+3. 웹 브라우저를 통한 Application Load Balancer 작동 테스트
+
+### Bastion host와 NAT Gateway를 통한 Private EC2 인스턴스의 외부 통신 구성
+![image](https://user-images.githubusercontent.com/31242766/209811046-a1fdafc9-b231-43f8-901b-3b9e5f7b9d0f.png)
+1. Private subnet에 EC2 생성
+2. Public subnet의 EC2를 통해 Private subnet의 EC2에 접속 (+ key pair 생성)
+3. NAT Gateway 생성
+4. Route table 설정
+5. Private subnet의 EC2의 외부 통신 테스트
+
+### Application Load Balancer를 통한 이중화 네트워크 구성 (2)
+![image](https://user-images.githubusercontent.com/31242766/209811216-c4d830c7-7ce8-432a-a709-617f74d87ef3.png)
+1. Target group 생성
+2. Application Load Balancer 구성
+3. 웹 브라우저를 통한 Application Load Balancer 작동 테스트
