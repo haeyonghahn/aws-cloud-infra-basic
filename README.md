@@ -109,3 +109,13 @@ Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프�
 
 ## LAMP 웹 서버 및 Application Load Balancer 구성
 ### 아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토
+__개요__   
+클라우드 네트워크 환경에 `L`inux 가상 서버에 `A`pache 웹 서버, `M`ySQL 데이터베이스, `P`HP 어플리케이션을 구성하고 Application Load Balancer를 이용하여 
+이중화 된 네트워크를 구성한다.
+
+__사용하는 AWS 서비스__   
+- Amazon VPC(VPC, Subnet, Internet Gateway, Route Table, NAT Gateway 등)
+- Amazon EC2
+- Amazon EBS
+- Amazon EFS
+- Elastic Load Balancer - Application Load Balancer
