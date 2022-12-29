@@ -132,10 +132,51 @@ __사용하는 AWS 서비스__
 ### 기본 네트워크 환경 구성 (VPC/Subnet/Internet Gateway/Route Table)
 ![image](https://user-images.githubusercontent.com/31242766/209810091-73af8f78-8b64-46e3-b742-0af10dbf1dee.png)
 1. VPC 생성   
-![image](https://user-images.githubusercontent.com/31242766/209882149-31fe2e2a-1ff6-4433-a499-bc78b965e121.png)
+  - VPC -> VPC -> VPC 생성   
+  ![image](https://user-images.githubusercontent.com/31242766/209882149-31fe2e2a-1ff6-4433-a499-bc78b965e121.png)     
+  - VPC -> VPC -> VPC ID -> VPC 설정 편집 (DNS 호스트 이름 활성화 체크)
+  ![image](https://user-images.githubusercontent.com/31242766/209887865-775ac8d6-0268-4526-8907-621181d23fac.png)   
+    - DNS 호스트 이름 활성화 : VPC 내부에서 생성되는 인스턴스에 퍼블릭 DNS 호스트 이름을 할당해주는 기능이다.
+> VPC 생성과 함께 만들어지는 리소스들
+> 1. 라우팅 테이블   
+> 라우팅 테이블은 실제로 서브넷과 연결된다. VPC 에도 연결되어 있는데 여기에 연결된 라우팅 테이블이 VPC 에 속한 서브넷을 생성할 때 서브넷과 자동으로 연결된다.
+> 해당 대역의 IP가 유입되게 되면 VPC 내에서 리소스를 검색한다.   
+> 2. DHCP 옵션 셋   
+> 도메인 네임 서버, NTP 서버, NetBIOS 서버 등의 정보를 가지고 있으며 보통은 기본값을 사용한다.   
+> 3. ACL과 시큐리티 그룹   
+> ACL은 서브넷의 앞단에서 방화벽 역할을 하는 리소스이다. ACL에는 인바운드와 아웃 바운드 규칙이 따로 있다. VPC와 함께 생성되는 ACL에는 
+> 인바운드와 아웃바운드 규칙 각각 2개의 규칙을 가지고 있다. 규칙의 번호는 우선순위를 나타낸다. 번호가 * 인 규칙은 다른 어떤 룰에도 매치하지 않을 경우 
+> 사용하는 기본 규칙이다. 기본 규칙은 모든 트래픽을 차단(Deny) 한다. 하지만 이 ACL에서는 기본 규칙이 사용되지 않는다. 왜냐하면 100번 규칙에서 모든 
+> 트래픽을 허용(Allow)하고 있기 때문이다.
+> ![image](https://user-images.githubusercontent.com/31242766/209889745-aa55702c-2ba6-413c-b09a-5a2a0f9e2ab2.png)
+
 2. Subnet 생성
+  - VPC -> 서브넷 -> 서브넷 생성   
+  Subnet은 VPC 의 CIDR 블럭. VPC 의 IP 대역을 나누는 것이기 때문에 VPC 의 하위 네트워크인 서브넷을 만들 때, 서브넷의 CIDR 블럭이 VPC CIDR 블럭보다 작아야한다.   
+  ![image](https://user-images.githubusercontent.com/31242766/209890591-54cc7a8f-642a-46cb-8690-a682e266cbff.png)
+  ![image](https://user-images.githubusercontent.com/31242766/209890713-1f950690-00ff-402e-830b-d8e9a12413c9.png)
+  ![image](https://user-images.githubusercontent.com/31242766/209890749-eb090871-2340-4e45-b660-d72686126159.png)
+  ![image](https://user-images.githubusercontent.com/31242766/209890793-9b4aec24-b060-4a05-9344-5425831f3a78.png)
+  ![image](https://user-images.githubusercontent.com/31242766/209890969-f7d8d692-1e38-4b5d-880a-1f818827184d.png)   
+  Subnet을 생성했으므로 EC2와 같은 리소스들이 생성될 수 있는 위치가 만들어졌다. 하지만 리소스들 사이, 외부 인터넷 사이에 트래픽이 이동할 수 있는 경로를 설정해주지 않았다.
+  이런 역할을 하는 네트워크 요소가 Internet Gateway와 Route Table이다.
+  
 3. Internet Gateway 생성
-4. Route Table 생성 및 Route 설정
+  - VPC -> 인터넷 게이트웨이 -> 인터넷 게이트웨이 생성   
+  ![image](https://user-images.githubusercontent.com/31242766/209891341-71efbf6b-b452-4dc5-a186-6212eaf8f3f1.png)
+  - VPC -> 인터넷 게이트웨이 -> VPC에 연결   
+  ![image](https://user-images.githubusercontent.com/31242766/209891401-0e2b106d-f752-404e-93c6-9c9825aff574.png)
+4. Route Table 생성 및 Route 설정   
+네트워크 통신 함에 있어 목적지, 대상지 경로에 데이터 패킷 이동 정보를 구성하는 규칙이다. Subnet에 위치한 EC2 리소스와 같이 것들이 목적지, 대상지에 따라서 어떤 경로를 통해 
+트래픽이 이동할 것인지에 대한 규칙을 설정해놓은 테이블이다.   
+- VPC -> 라우팅 테이블 -> 라우팅 테이블 생성
+![image](https://user-images.githubusercontent.com/31242766/209891779-c4298049-2ec8-49cd-b805-bf9da798ec48.png)   
+- VPC -> 라우팅 테이블 -> 라우팅 테이블 ID -> 서브넷 연결 편집   
+![image](https://user-images.githubusercontent.com/31242766/209892096-2b7c0474-1a85-4ac4-9b6a-5368bd5ff2fc.png)   
+Internet gateway를 VPC에 붙인 것처럼 라우팅 테이블이 어떤 서브넷에 대한 트랙픽 경로인지에 정해주어야한다. `public-subnet-a1`, `public-subnet-c1` 서브넷에 연결하도록 한다.   
+- VPC -> 라우팅 테이블 -> 라우팅 테이블 ID -> 라우팅 편집    
+public subnet에 위치한 EC2 인스턴스와 같은 리소스들이 외부 인터넷과 통신할 수 있도록 라우팅 테이블에 인터넷 게이트웨이를 경로로 추가한다.   
+![image](https://user-images.githubusercontent.com/31242766/209892961-84fb9aa8-a807-4f08-a9f6-7f7b967e197e.png)
 
 ### Public EC2 인스턴스 생성 및 LAMP 웹서버 구성
 ![image](https://user-images.githubusercontent.com/31242766/209810256-dd536659-cb46-4c38-9931-c436914facf2.png)
