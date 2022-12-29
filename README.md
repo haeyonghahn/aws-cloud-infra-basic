@@ -176,7 +176,15 @@ __사용하는 AWS 서비스__
 Internet gateway를 VPC에 붙인 것처럼 라우팅 테이블이 어떤 서브넷에 대한 트랙픽 경로인지에 정해주어야한다. `public-subnet-a1`, `public-subnet-c1` 서브넷에 연결하도록 한다.   
 - VPC -> 라우팅 테이블 -> 라우팅 테이블 ID -> 라우팅 편집    
 public subnet에 위치한 EC2 인스턴스와 같은 리소스들이 외부 인터넷과 통신할 수 있도록 라우팅 테이블에 인터넷 게이트웨이를 경로로 추가한다.   
-![image](https://user-images.githubusercontent.com/31242766/209892961-84fb9aa8-a807-4f08-a9f6-7f7b967e197e.png)
+![image](https://user-images.githubusercontent.com/31242766/209892961-84fb9aa8-a807-4f08-a9f6-7f7b967e197e.png)   
+> 참고 : Destination이 `10.1.0.0/16` 이고 Target `local`로 되어 있는 것은 
+> 기본적으로 내 VPC CIDR 블럭 내에서는 트래픽이 이동이 가능하다는 것을 의미한다.
+
+- private subnet에 대한 라우팅 테이블 생성    
+public subnet 라우팅 테이블을 만들고 라우팅 테이블에 internet gateway를 붙인 방법과 동일하게 진행하면 된다.   
+![image](https://user-images.githubusercontent.com/31242766/209896519-0f4f3843-ed73-490a-89ab-803dba1771ef.png)
+![image](https://user-images.githubusercontent.com/31242766/209896867-e08b6e3d-7a26-4258-b2a3-3caae3c099e7.png)
+
 
 ### Public EC2 인스턴스 생성 및 LAMP 웹서버 구성
 ![image](https://user-images.githubusercontent.com/31242766/209810256-dd536659-cb46-4c38-9931-c436914facf2.png)
