@@ -294,9 +294,36 @@ EC2 인스턴스 `퍼블릭 IP 주소`로 접속
 
 ### Custom AMI를 통한 Public EC2 인스턴스 생성
 ![image](https://user-images.githubusercontent.com/31242766/209810557-84d0b07f-28a2-40cd-84ec-d3d417f582dc.png)
-1. Custom AMI 생성
+1. Custom AMI 생성    
+AWS EC2 서비스는 말 그대로 `하나의 서버를 제공하여 편하게 관리할 수 있도록 도와주는 서비스이다.` AWS EC2의 가장 큰 장점 중 하나는, 하나의 서버에 다양한 프로그램이 설치 되어있는 형태 그대로를 이미지(AMI)로 만들 수 있다는 점이다. 그렇기 때문에 컨테이너 기술을 잘 모르는 사람들도 편하게 서버를 이미지화하여 사용할 수 있다.   
+서버를 이미지화 했을 때 얻을 수 있는 가장 큰 이점으로는 서버가 정상적으로 동작했을 때의 상태를 미리 이미지로 저장해 놓을 수 있다는 것이다. 그래서 서버에 문제가 생겼을 때는 현재의 서버를 내려 버리고, 이미지(AMI)로 만들어 놓았던 것을 그대로 AWS EC2 인스턴스로 만들 수 있다.
+
+- EC2 -> 인스턴스 -> EC2 인스턴스 ID -> 이미지 생성   
+![image](https://user-images.githubusercontent.com/31242766/209920663-e1d9672a-8316-4ce5-b54e-7ca0bf7515f2.png)
+
 2. Custom AMI를 통해 EC2 추가 생성
+- 이름 및 태그, 애플리케이션 및 OS 이미지(Amazon Machine Image)   
+![image](https://user-images.githubusercontent.com/31242766/209921033-a6f7d263-0481-4411-ab24-70db5fc95112.png)   
+- 키 페어(로그인)   
+![image](https://user-images.githubusercontent.com/31242766/209921153-c5e57ac5-8633-41fa-8f59-9e0c10a2b7e4.png)    
+- 네트워크 설정   
+![image](https://user-images.githubusercontent.com/31242766/209922056-ae93af6f-3379-4633-9ec6-87f4533ae444.png)   
+- 스토리지 구성   
+![image](https://user-images.githubusercontent.com/31242766/209922110-13d0df04-4536-474f-a16d-bb26661a6675.png)   
+- 고급 세부 정보   
+> 중요 : 고급 세부 정보 설정은 `Public EC2 인스턴스 생성 및 LAMP 웹서버 구성`에서 EC2 생성 시 설정한 고급 세부 설정을 따른다. 하지만 
+> `고급 세부 정보 -> 사용자 데이터`는 `public-ec2-a1`을 만들 때 인스턴스가 생성되는 과정에서 LAMP 웹 서버 구성에 필요한 주 패키지를 설치하게 했지만
+> 이번 인스턴스는 해당 패키지들이 이미 설치되어 있는 인스턴스의 이미지로 만든 `AMI`를 사용하기 때문에 `사용자 데이터`는 별도로 추가하지 않고 
+> 진행한다.
+
+- Elastic IP 할당   
+`Public EC2 인스턴스 생성 및 LAMP 웹서버 구성`에서 탄력적 IP 주소를 설정 정보와 동일하게 진행한다.   
+![image](https://user-images.githubusercontent.com/31242766/209923480-ddf8308b-e6ff-4d11-8e31-61686f87dd04.png)   
+![image](https://user-images.githubusercontent.com/31242766/209923651-998ce7e2-208e-4b96-a498-e037f41d3960.png)
+![image](https://user-images.githubusercontent.com/31242766/209923788-2d2b7afa-e559-47c9-9704-2635e1a36dfb.png)
+
 3. 웹 브라우저에서 LAMP 웹 서버 작동 테스트
+![image](https://user-images.githubusercontent.com/31242766/209923946-90959f8f-827c-4680-85be-3a9d58cc4c6e.png)
 
 ### EFS를 통한 네트워크 파일 시스템 구성
 ![image](https://user-images.githubusercontent.com/31242766/209810645-9e6827b4-e033-4661-b663-3250263e043a.png)
