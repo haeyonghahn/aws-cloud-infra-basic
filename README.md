@@ -204,6 +204,7 @@ public subnet에 위치한 EC2 인스턴스와 같은 리소스들이 외부 인
 ![image](https://user-images.githubusercontent.com/31242766/209913372-8c4824e6-3f2f-49ea-bc36-4398c435f54e.png)
 ![image](https://user-images.githubusercontent.com/31242766/209913421-246f6943-9d88-425f-a2bd-bb9f6a19cd4b.png)
 ![image](https://user-images.githubusercontent.com/31242766/209913526-639d9b77-a93c-4997-afa9-4fcbcc049176.png)
+
 2. Elastic IP 할당
 - EC2 -> 탄력적 IP 주소 -> 탄력적 IP 주소 할당    
 탄력적 IP 주소를 생성한다.   
@@ -213,8 +214,83 @@ public subnet에 위치한 EC2 인스턴스와 같은 리소스들이 외부 인
 ![image](https://user-images.githubusercontent.com/31242766/209914187-7157be85-c04f-4a37-9afc-33ec7acda037.png)
 ![tempsnip](https://user-images.githubusercontent.com/31242766/209915947-27d15264-d31e-4b2f-a908-13846af1a10f.png)
 
-4. Index.php 파일 생성
-5. 웹 브라우저에서 LAMP 웹 서버 작동 테스트
+3. Index.php 파일 생성
+- EC2 인스턴스에 접속   
+![image](https://user-images.githubusercontent.com/31242766/209918540-b1baabf0-3e98-4c5b-b25d-4ac83c02f746.png)   
+- `root` 로 이동    
+![image](https://user-images.githubusercontent.com/31242766/209918628-89be94fb-9062-4f06-8255-ffbe7e1a94a1.png)
+- `/var/www/html` 경로에 `index.php` 파일 생성
+![image](https://user-images.githubusercontent.com/31242766/209918825-b0ccb64f-391d-488e-941f-57c599e88f9e.png)   
+```php
+<?php include "dbinfo.inc"; ?>
+<html>
+<body>
+<h1>Instance data</h1>
+<?php
+
+  echo "<table>";
+  echo "<tr><th>Data</th><th>Value</th></tr>";
+
+  $urlRoot="http://169.254.169.254/latest/meta-data/";
+
+  echo "<tr><td>Instance ID</td><td><i>" . file_get_contents($urlRoot . 'instance-id') . "</i></td><tr>";
+  echo "<tr><td>Private IP Address</td><td><i>" . file_get_contents($urlRoot . 'local-ipv4') . "</i></td><tr>";
+  echo "<tr><td>Public IP Address</td><td><i>" . file_get_contents($urlRoot . 'public-ipv4') . "</i></td><tr>";
+  echo "<tr><td>Availability Zone</td><td><i>" . file_get_contents($urlRoot . 'placement/availability-zone') . "</i></td><tr>";
+
+  echo "</table>";
+
+?>
+<h1>RDS Practice</h1>
+<?php
+
+  /* Connect to MySQL and select the database. */
+  $connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
+
+  if (mysqli_connect_errno()) echo "Failed to connect to MySQL: " . mysqli_connect_error();
+
+  $database = mysqli_select_db($connection, DB_DATABASE);
+
+?>
+
+<!-- Display table data. -->
+<table border="1" cellpadding="2" cellspacing="2">
+  <tr>
+    <td>ID</td>
+    <td>NAME</td>
+    <td>ADDRESS</td>
+  </tr>
+
+<?php
+
+$result = mysqli_query($connection, "SELECT * FROM SAMPLE");
+
+while($query_data = mysqli_fetch_row($result)) {
+  echo "<tr>";
+  echo "<td>",$query_data[0], "</td>",
+       "<td>",$query_data[1], "</td>",
+       "<td>",$query_data[2], "</td>";
+  echo "</tr>";
+}
+?>
+
+</table>
+
+<!-- Clean up. -->
+<?php
+
+  mysqli_free_result($result);
+  mysqli_close($connection);
+
+?>
+
+</body>
+</html>
+```
+
+4. 웹 브라우저에서 LAMP 웹 서버 작동 테스트    
+EC2 인스턴스 `퍼블릭 IP 주소`로 접속    
+![image](https://user-images.githubusercontent.com/31242766/209919324-066e34ff-afff-4b5f-a97c-1d69dcffce0e.png)
 
 ### Custom AMI를 통한 Public EC2 인스턴스 생성
 ![image](https://user-images.githubusercontent.com/31242766/209810557-84d0b07f-28a2-40cd-84ec-d3d417f582dc.png)
