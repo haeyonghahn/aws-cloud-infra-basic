@@ -158,6 +158,7 @@ __사용하는 AWS 서비스__
   ![image](https://user-images.githubusercontent.com/31242766/209890749-eb090871-2340-4e45-b660-d72686126159.png)
   ![image](https://user-images.githubusercontent.com/31242766/209890793-9b4aec24-b060-4a05-9344-5425831f3a78.png)
   ![image](https://user-images.githubusercontent.com/31242766/209890969-f7d8d692-1e38-4b5d-880a-1f818827184d.png)   
+  동일하게 `private-subnet-c2` 도 생성한다.   
   Subnet을 생성했으므로 EC2와 같은 리소스들이 생성될 수 있는 위치가 만들어졌다. 하지만 리소스들 사이, 외부 인터넷 사이에 트래픽이 이동할 수 있는 경로를 설정해주지 않았다.
   이런 역할을 하는 네트워크 요소가 Internet Gateway와 Route Table이다.
   
@@ -181,21 +182,39 @@ public subnet에 위치한 EC2 인스턴스와 같은 리소스들이 외부 인
 > 기본적으로 내 VPC CIDR 블럭 내에서는 트래픽이 이동이 가능하다는 것을 의미한다.
 
 - private subnet에 대한 라우팅 테이블 생성    
-public subnet 라우팅 테이블을 만들고 라우팅 테이블에 internet gateway를 붙인 방법과 동일하게 진행하면 된다.   
 ![image](https://user-images.githubusercontent.com/31242766/209896519-0f4f3843-ed73-490a-89ab-803dba1771ef.png)
-![image](https://user-images.githubusercontent.com/31242766/209896867-e08b6e3d-7a26-4258-b2a3-3caae3c099e7.png)
-
+![image](https://user-images.githubusercontent.com/31242766/209896867-e08b6e3d-7a26-4258-b2a3-3caae3c099e7.png)   
+`private-subnet-a1` 과 마찬가지로 `private-subnet-c1`, `private-subnet-a2`, `private-subnet-c2` 에 대한 라우팅 테이블을 생성한다.
 
 ### Public EC2 인스턴스 생성 및 LAMP 웹서버 구성
 ![image](https://user-images.githubusercontent.com/31242766/209810256-dd536659-cb46-4c38-9931-c436914facf2.png)
-1. EC2 생성
-- AMI
-- LAMP 웹 서버 구성 (Linux, Apache, MySQL, PHP)
-- Security Group
-- Storage(EBS)
-- Key pair
-2. Index.php 파일 생성
-3. 웹 브라우저에서 LAMP 웹 서버 작동 테스트
+1. EC2 생성   
+- 이름 및 태그, 애플리케이션 및 OS 이미지(Amazon Machine Image)   
+![image](https://user-images.githubusercontent.com/31242766/209909357-157e1eb3-1774-42c5-b3f3-38ec365baf02.png)
+- 키 페어(로그인)   
+![image](https://user-images.githubusercontent.com/31242766/209909962-ed35128b-4129-4881-a2f9-beb6993d9beb.png)
+- 네트워크 설정   
+![image](https://user-images.githubusercontent.com/31242766/209910983-78feee16-bc5d-434d-a48a-159e09003676.png)   
+![image](https://user-images.githubusercontent.com/31242766/209911018-ea1c0316-5d2a-4122-9026-8d15158c418f.png)
+- Storage(EBS) 
+![image](https://user-images.githubusercontent.com/31242766/209911197-f84060c4-a047-4174-a158-9443ed2ed0a6.png)
+- 파일시스템
+![image](https://user-images.githubusercontent.com/31242766/209911612-9194c8a4-6a67-4a59-b53b-341f5c26c6ee.png)
+- 고급 세부 정보
+![image](https://user-images.githubusercontent.com/31242766/209913372-8c4824e6-3f2f-49ea-bc36-4398c435f54e.png)
+![image](https://user-images.githubusercontent.com/31242766/209913421-246f6943-9d88-425f-a2bd-bb9f6a19cd4b.png)
+![image](https://user-images.githubusercontent.com/31242766/209913526-639d9b77-a93c-4997-afa9-4fcbcc049176.png)
+2. Elastic IP 할당
+- EC2 -> 탄력적 IP 주소 -> 탄력적 IP 주소 할당    
+탄력적 IP 주소를 생성한다.   
+![image](https://user-images.githubusercontent.com/31242766/209913943-1df900ad-4cda-411f-8852-88faa70c30af.png)    
+- EC2 -> 탄력적 IP 주소 -> 3.37.180.76 -> 탄력적 IP 주소 연결     
+탄력적 IP 주소와 EC2 인스턴스를 연결한다.      
+![image](https://user-images.githubusercontent.com/31242766/209914187-7157be85-c04f-4a37-9afc-33ec7acda037.png)
+![tempsnip](https://user-images.githubusercontent.com/31242766/209915947-27d15264-d31e-4b2f-a908-13846af1a10f.png)
+
+4. Index.php 파일 생성
+5. 웹 브라우저에서 LAMP 웹 서버 작동 테스트
 
 ### Custom AMI를 통한 Public EC2 인스턴스 생성
 ![image](https://user-images.githubusercontent.com/31242766/209810557-84d0b07f-28a2-40cd-84ec-d3d417f582dc.png)
