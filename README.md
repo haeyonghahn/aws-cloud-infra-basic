@@ -327,7 +327,11 @@ AWS EC2 서비스는 말 그대로 `하나의 서버를 제공하여 편하게 �
 
 ### EFS를 통한 네트워크 파일 시스템 구성
 ![image](https://user-images.githubusercontent.com/31242766/209810645-9e6827b4-e033-4661-b663-3250263e043a.png)
-1. EFS용 Security Group 생성
+1. EFS용 Security Group 생성    
+- VPC -> 보안 그룹 -> 보안 그룹 생성   
+![image](https://user-images.githubusercontent.com/31242766/209927768-3271a2fb-551e-4baf-a573-40bfeb1d4e20.png)   
+EFS 에 대한 Security Group 을 구성할 때 EFS와 연결하고자 하는 인스턴스 Security Group 을 선택한다. public-ec2-sg 에서 나오는 NFS 트래픽을 마운트하는 것이다. 
+
 2. EFS 생성
 - Availability
 - Lifecycle
