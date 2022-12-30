@@ -333,12 +333,97 @@ AWS EC2 서비스는 말 그대로 `하나의 서버를 제공하여 편하게 �
 EFS 에 대한 Security Group 을 구성할 때 EFS와 연결하고자 하는 인스턴스 Security Group 을 선택한다. public-ec2-sg 에서 나오는 NFS 트래픽을 마운트하는 것이다. 
 
 2. EFS 생성
-- Availability
-- Lifecycle
-- Performance/Throughput mode 
-- Network 등
+- Amazon EFS -> 파일 시스템 -> 생성
+  - 일반   
+  ![image](https://user-images.githubusercontent.com/31242766/210023356-b866d726-8742-4983-9e50-a80db6214fd2.png)   
+  - 성능 설정   
+  ![image](https://user-images.githubusercontent.com/31242766/210023645-ba337c28-9789-4d54-9d9c-86fd8ce14967.png)   
+  - 네트워크   
+  ![image](https://user-images.githubusercontent.com/31242766/210023817-6a2af3a4-d83a-40af-9cf2-5e5cf39da0a0.png)   
+  - 파일 시스템 정책   
+  ![image](https://user-images.githubusercontent.com/31242766/210023864-f80212a9-4f0b-4992-a08f-5710a1acd05f.png)   
+
 3. EFS-EC2 마운트
+- EC2 인스턴스에 접속   
+![image](https://user-images.githubusercontent.com/31242766/210024195-f3af9bc7-81c4-4c26-a773-eed52c7127f5.png)   
+`df -h` 명령어는 파일 시스템의 디스크 공간을 확인하는 명령어이다.   
+현재는 마운트된 EFS가 없는 것을 확인할 수 있다.   
+- EFS 마운트 헬퍼 설치   
+```linux
+[ec2-user@ip-10-1-1-143 ~]$ sudo su
+[root@ip-10-1-1-143 ec2-user]# yum install amazon-efs-utils -y
+```
+- EFS 마운트 포인트 생성    
+마운트 포인트는 사실 어디에 만들어도 상관은 없다. 하지만 실습을 위해서 아래 경로에 생성을 하도록 한다.   
+```linux
+[root@ip-10-1-1-143 ec2-user]# cd /var/www/html
+[root@ip-10-1-1-143 html]# ls -la
+total 4
+drwxrwsr-x 2 ec2-user apache   23 Dec 29 07:31 .
+drwxrwsr-x 4 ec2-user apache   33 Dec 29 06:45 ..
+-rw-r--r-- 1 root     apache 1524 Dec 29 07:31 index.php
+[root@ip-10-1-1-143 html]# mkdir efs
+[root@ip-10-1-1-143 html]# ls -la
+total 4
+drwxrwsr-x 3 ec2-user apache   34 Dec 30 00:54 .
+drwxrwsr-x 4 ec2-user apache   33 Dec 29 06:45 ..
+drwxr-sr-x 2 root     apache    6 Dec 30 00:54 efs
+-rw-r--r-- 1 root     apache 1524 Dec 29 07:31 index.php
+```
+- EFS-EC2 연결
+![tempsnip](https://user-images.githubusercontent.com/31242766/210024580-652f4764-c589-492c-9e51-05b1e32eb05f.png)   
+```linux
+[root@ip-10-1-1-143 html]# sudo mount -t efs -o tls fs-08b2f0b43ab1b71a7:/ efs
+[root@ip-10-1-1-143 html]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        474M     0  474M   0% /dev
+tmpfs           483M     0  483M   0% /dev/shm
+tmpfs           483M  476K  482M   1% /run
+tmpfs           483M     0  483M   0% /sys/fs/cgroup
+/dev/xvda1      8.0G  1.9G  6.2G  23% /
+tmpfs            97M     0   97M   0% /run/user/1000
+127.0.0.1:/     8.0E     0  8.0E   0% /var/www/html/efs
+[root@ip-10-1-1-143 html]#
+```
+
 4. 웹 브라우저를 통한 EFS 마운트 테스트
+- S3 버킷에 있는 `mycar.jpg` 객체 URL 복사하여 EFS 에 다운로드   
+![tempsnip](https://user-images.githubusercontent.com/31242766/210024876-b6ae8379-804c-4096-a6aa-b174b4e65016.png)   
+```linux
+[root@ip-10-1-1-143 efs]# wget https://lab-s3-web-hosting-by-haeyong.s3.ap-northeast-2.amazonaws.com/car.jpg
+[root@ip-10-1-1-143 efs]# ls -la
+total 8508
+drwxr-xr-x 2 root     root      6144 Dec 30 01:06 .
+drwxrwsr-x 3 ec2-user apache      34 Dec 30 00:54 ..
+-rw-r--r-- 1 root     root   8705340 Dec 20 12:47 car.jpg
+```
+- `mycar.html` 객체 URL 도 동일하게 다운로드 한다.
+```linux
+[root@ip-10-1-1-143 efs]# wget https://lab-s3-web-hosting-by-haeyong.s3.ap-northeast-2.amazonaws.com/mycar.html
+[root@ip-10-1-1-143 efs]# ls -la
+total 8512
+drwxr-xr-x 2 root     root      6144 Dec 30 01:07 .
+drwxrwsr-x 3 ec2-user apache      34 Dec 30 00:54 ..
+-rw-r--r-- 1 root     root   8705340 Dec 20 12:47 car.jpg
+-rw-r--r-- 1 root     root        94 Dec 20 12:47 mycar.html
+[root@ip-10-1-1-143 efs]#
+```
+- `http://EC2인스턴스퍼블릭IP/efs/mycar.html`로 접속
+![image](https://user-images.githubusercontent.com/31242766/210025194-6ad901e3-d2a1-458e-9a3c-0ccc9842cb85.png)
+
+- `public-ec2-c1`도 동일하게 진행한다. 
+`public-ec2-c1` EFS 경로로 들어가보면 `public-ec2-a1` 에서 올렸던 파일들을 확인할 수 있다.
+```linux
+[root@ip-10-1-2-34 html]# cd /var/www/html/efs
+[root@ip-10-1-2-34 efs]# ls -la
+total 8512
+drwxr-xr-x 2 root     root      6144 Dec 30 01:07 .
+drwxrwsr-x 3 ec2-user apache      34 Dec 30 01:20 ..
+-rw-r--r-- 1 root     root   8705340 Dec 20 12:47 car.jpg
+-rw-r--r-- 1 root     root        94 Dec 20 12:47 mycar.html
+[root@ip-10-1-2-34 efs]#
+```
+![image](https://user-images.githubusercontent.com/31242766/210025578-ff32813b-c995-4753-aee4-29115e3743fd.png)
 
 ### Application Load Balancer를 통한 이중화 네트워크 구성 (1)
 ![image](https://user-images.githubusercontent.com/31242766/209810858-7ebf2ddd-b2aa-48c4-82ab-5cf893af2e4c.png)
