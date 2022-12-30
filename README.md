@@ -426,16 +426,42 @@ drwxrwsr-x 3 ec2-user apache      34 Dec 30 01:20 ..
 ![image](https://user-images.githubusercontent.com/31242766/210025578-ff32813b-c995-4753-aee4-29115e3743fd.png)
 
 ### Application Load Balancer를 통한 이중화 네트워크 구성 (1)
-![image](https://user-images.githubusercontent.com/31242766/209810858-7ebf2ddd-b2aa-48c4-82ab-5cf893af2e4c.png)
-1. Target group 생성
-- Target type
-- Protocol/Port
+Application Load Balancer를 통해서 이중화 네트워크를 구성하고 트래픽을 분산시킨다.   
+![image](https://user-images.githubusercontent.com/31242766/209810858-7ebf2ddd-b2aa-48c4-82ab-5cf893af2e4c.png)   
+1. Target group 생성   
+- 그룹 세부 정보 지정   
+로드 밸런서는 기본적으로 트래픽을 받으면 리스너를 통해 타겟 그룹으로 전달하게 된다.   
+![image](https://user-images.githubusercontent.com/31242766/210025961-f606b01b-12f4-4166-bebb-ebe09dec0297.png)
+![image](https://user-images.githubusercontent.com/31242766/210026064-a8b1434c-b6b2-4642-a846-1e11893349df.png)   
+Protocol과 Port는 Application Load Balancer와 타겟이 되는 EC2 인스턴스 사이의 통신에 대한 것이다. 그래서 EC2 인스턴스는
+여기서 설정하는 Protocol과 Port 요청만 받아들이겠다는 의미가 된다.   
+![image](https://user-images.githubusercontent.com/31242766/210026288-0f22681f-8799-4632-ac6b-d934adacb97f.png)
+![image](https://user-images.githubusercontent.com/31242766/210026350-61a9e60e-1e2c-42ee-9d2b-c18c2c00d41e.png)   
+- 대상 등록   
+![tempsnip](https://user-images.githubusercontent.com/31242766/210026462-6faa34ac-ed26-4923-97fb-59c193c68559.png)
+
 2. Application Load Balancer 구성
-- Scheme
-- Network
-- Security Group
-- Listener/Rule 등
+- 기본구성   
+![image](https://user-images.githubusercontent.com/31242766/210026611-f5abae71-1009-4dbd-8092-a6d1ef38a532.png)   
+- Network mapping     
+![image](https://user-images.githubusercontent.com/31242766/210026796-42d01ad5-7784-4f25-a309-a1c794b00ac8.png)   
+- 보안 그룹    
+새 보안 그룹을 생성하여 등록한다.   
+![image](https://user-images.githubusercontent.com/31242766/210026980-c04d4fbf-38f0-4118-950e-3e92481b4386.png)    
+![image](https://user-images.githubusercontent.com/31242766/210027028-f3fd19b7-e0f8-4062-a2fe-9c23e8b961ad.png)    
+![image](https://user-images.githubusercontent.com/31242766/210027077-f8fc08d1-317b-4a7f-9ede-3a73eab48b56.png)    
+- 리스너 및 라우팅    
+리스너가 로드밸런서로 들어온 트래픽, 요청을 받아들이고 정보를 분석해서 어느 타겟 그룹을 트래픽을 전달할지 수행한다.    
+이 단계에서는 외부 인터넷과 Application Load Balancer 사이의 통신에 대한 프로토콜과 포트를 지정한다.   
+기본 작업은 리스너가 전달받은 트래픽, 리스너에 대한 기본 액션을 설정하는 것이다. 이 부분이 리스너의 `역할`이 된다.   
+![image](https://user-images.githubusercontent.com/31242766/210027507-e3f3388c-c29c-4ddd-98fe-7ce895252718.png)   
+![image](https://user-images.githubusercontent.com/31242766/210027522-f2e6f9b1-8d80-4ffd-a798-c285515c6ef3.png)   
+![image](https://user-images.githubusercontent.com/31242766/210027565-21a20f31-2601-4545-bc13-c7f932f799bf.png)
+
 3. 웹 브라우저를 통한 Application Load Balancer 작동 테스트
+![tempsnip](https://user-images.githubusercontent.com/31242766/210027855-fbcd9de4-bba4-47cc-88b2-891b5081afad.png)   
+![image](https://user-images.githubusercontent.com/31242766/210028465-f460c381-80f0-4c87-8409-83a858f1cd24.png)   
+![image](https://user-images.githubusercontent.com/31242766/210028476-ae48baa7-3c18-41aa-b9e6-3298e33454bc.png)
 
 ### Bastion host와 NAT Gateway를 통한 Private EC2 인스턴스의 외부 통신 구성
 ![image](https://user-images.githubusercontent.com/31242766/209811046-a1fdafc9-b231-43f8-901b-3b9e5f7b9d0f.png)
