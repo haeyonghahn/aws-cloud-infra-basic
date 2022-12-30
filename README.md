@@ -16,10 +16,10 @@
   * **[Application Load Balancer를 통한 이중화 네트워크 구성 (2)](#application-load-balancer를-통한-이중화-네트워크-구성-2)**
 * **[관계형 데이터베이스 서비스 구성](#관계형-데이터베이스-서비스-구성)**
   * **[아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토](#아키텍처-관련-기술서비스다이어그램구현-순서-검토-2)**
-  * **[Amazon RDS를 통한 MySQL 데이터베이스 이중화(Multi-AZ) 구성](#Amazon-RDS를-통한-MySQL-데이터베이스-이중화(Multi-AZ)-구성)**
+  * **[Amazon RDS를 통한 MySQL 데이터베이스 이중화(Multi-AZ) 구성](#amazon-rds를-통한-mysql-데이터베이스-이중화multi-az-구성)**
   * **[웹 서버와 데이터베이스 인스턴스 연결](#웹-서버와-데이터베이스-인스턴스-연결)**
-  * **[데이터베이스의 Read replica 생성 및 웹 서버 연결](#데이터베이스의-Read-replica-생성-및-웹-서버-연결)**
-  * **[Failover를 통한 데이터베이스 이중화 테스트](#Failover를-통한-데이터베이스-이중화-테스트)**
+  * **[데이터베이스의 Read replica 생성 및 웹 서버 연결](#데이터베이스의-read-replica-생성-및-웹-서버-연결)**
+  * **[Failover를 통한 데이터베이스 이중화 테스트](#failover를-통한-데이터베이스-이중화-테스트)**
 
 ## EC2 Instance 접속을 위한 PuTTY 사용 방법
 Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프로그램이 필요한데 PuTTY라는 프로그램을 사용한다.
