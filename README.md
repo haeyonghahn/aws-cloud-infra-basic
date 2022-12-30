@@ -534,10 +534,34 @@ https://aws.amazon.com/amazon-linux-2/
 `private-ec2-a1`은 외부 인터넷과 직접적인 통신이 불가하다. 하지만 private 네트워크라 하더라도 패키지 설치 등 등 다운로드가 필요한 경우가 생긴다. 
 이럴 땐 외부와 통신 경로가 필요하다. `NAT Gateway`를 사용해서 `private-ec2-a1`이 외부와 통신이 가능한 환경을 구성하자.
 
-3. NAT Gateway 생성
+3. NAT Gateway 생성   
+NAT 게이트웨이는 NAT(네트워크 주소 변환) 서비스이다. 프라이빗 서브넷의 인스턴스가 VPC 외부의 서비스에 연결할 수 있지만 
+외부 서비스에서 이러한 인스턴스와의 연결을 시작할 수 없도록 NAT 게이트웨이를 사용할 수 있다.   
+- VPC -> NAT 게이트웨이 -> NAT 게이트웨이 생성   
+![image](https://user-images.githubusercontent.com/31242766/210062130-50b71378-21c0-4308-be5d-e040bcd78105.png)
+![tempsnip](https://user-images.githubusercontent.com/31242766/210062582-2f6c0cf7-c248-41dc-b9da-b6deb6b3a38b.png)
 
 4. Route table 설정
-5. Private subnet의 EC2의 외부 통신 테스트
+![image](https://user-images.githubusercontent.com/31242766/210062329-36a2407b-c005-41aa-98ae-063f55f86467.png)
+![image](https://user-images.githubusercontent.com/31242766/210062384-7f844116-1026-439a-b1d8-8ff766ba5bf8.png)
+
+5. Private subnet의 EC2의 외부 통신 테스트    
+![image](https://user-images.githubusercontent.com/31242766/210062739-1f39202b-7040-4504-ae81-67cd320cb176.png)
+
+`private-ec2-c1`도 동일하게 진행한다.
+- private subnet ec2 생성    
+![image](https://user-images.githubusercontent.com/31242766/210063098-e5f20afa-6f12-4950-9b49-9edcc0f91d62.png)
+![image](https://user-images.githubusercontent.com/31242766/210063132-3a82de21-c465-40c9-a5e4-64b15151027c.png)
+![image](https://user-images.githubusercontent.com/31242766/210063185-5506bbb4-133d-4f09-8d65-0eaa88bf5f8b.png)
+![image](https://user-images.githubusercontent.com/31242766/210063420-5237c5f9-82e9-4bef-a94b-9d05634a5c32.png)
+![image](https://user-images.githubusercontent.com/31242766/210063472-3d3b5b72-5b0b-4aef-846b-bbfcdd06526e.png)
+- nat gateway 생성    
+![image](https://user-images.githubusercontent.com/31242766/210064652-67868eff-48cd-4e55-9e6e-eb5b82aaf5c2.png)
+![image](https://user-images.githubusercontent.com/31242766/210065539-1d3a3817-7655-40ed-b743-e9443caef1b5.png)   
+- Route table 설정   
+![image](https://user-images.githubusercontent.com/31242766/210065738-46ac7fb0-41a0-4b45-aa01-6080908966e4.png)
+- private subnet(`private-subnet-ec1`)의 EC2의 외부 통신 테스트    
+`private-subnet-a1`과 동일하게 진행한다.
 
 ### Application Load Balancer를 통한 이중화 네트워크 구성 (2)
 ![image](https://user-images.githubusercontent.com/31242766/209811216-c4d830c7-7ce8-432a-a709-617f74d87ef3.png)
