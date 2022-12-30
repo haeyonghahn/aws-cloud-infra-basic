@@ -564,7 +564,31 @@ NAT 게이트웨이는 NAT(네트워크 주소 변환) 서비스이다. 프라�
 `private-subnet-a1`과 동일하게 진행한다.
 
 ### Application Load Balancer를 통한 이중화 네트워크 구성 (2)
-![image](https://user-images.githubusercontent.com/31242766/209811216-c4d830c7-7ce8-432a-a709-617f74d87ef3.png)
-1. Target group 생성
+![image](https://user-images.githubusercontent.com/31242766/209811216-c4d830c7-7ce8-432a-a709-617f74d87ef3.png)    
+앞선 진행했던 로드 밸런서처럼 외부와 직접적인 통신이 가능한 퍼블릭 영역에 그대로 노출시키는 것은 실제 웹 서비스를 제공하는데 있어 
+보안적인 측면으로 적절한 방법이 아니다. 그래서 웹 서비스를 외부와 직접적인 통신이 제한되어 있는 영역에 두고 이를 어플리케이션 로드 밸런서를 통해 
+트래픽을 분산하고 웹 서비스를 제공할 수 있는 환경을 구성해보도록 하자.   
+
+1. Target group 생성   
+![image](https://user-images.githubusercontent.com/31242766/210066953-73c3904d-7a73-429f-805c-b3d392507324.png)
+![image](https://user-images.githubusercontent.com/31242766/210067042-00d8470c-1a2b-4997-85a9-87ea5edbeb05.png)
+![image](https://user-images.githubusercontent.com/31242766/210067086-1fa141db-a384-4993-ab42-425e1a96b61e.png)
+![image](https://user-images.githubusercontent.com/31242766/210067147-7a38f0b8-9eb3-400a-915f-af39f3976e3a.png)
+
 2. Application Load Balancer 구성
+![image](https://user-images.githubusercontent.com/31242766/210067513-145d78bd-64c8-45e9-a7ac-109c677c4286.png)   
+> 참고 : 로드 밸런서 Network mapping 이 `private-subnet`이 아니라 `public-subnet`인 이유는 EC2 인스턴스 리소스들처럼 
+> 로드 밸런서도 네트워크 인터페이스 IP를 통해서 통신하게 되는데 외부 인터넷과 통신하기 위해서는 네트워크 인터페이스가 인터넷 게이트웨이를 통해 
+> 외부 인터넷과 통신이 가능한 서브넷에 위치해야 한다. 그래서 외부에서의 트래픽이 퍼블릭 서브넷에 위치한 로드 밸런서의 네트워크 인터페이스를 통해 
+> 들어오게 되면 트래픽이 Private Subnet의 EC2 인스턴스로 이동하게 되고 통신이 가능해지는 것이다.
+
+![image](https://user-images.githubusercontent.com/31242766/210067953-385bd618-5766-4322-8aa0-c82216bd58a7.png)   
+![image](https://user-images.githubusercontent.com/31242766/210068078-cea89619-e3b7-4268-9c30-af5d1205ea2a.png)
+![image](https://user-images.githubusercontent.com/31242766/210068127-53932919-f2e5-4c76-935c-dd2e96088135.png)
+![image](https://user-images.githubusercontent.com/31242766/210068214-aaef3ef0-92b6-48d4-9e7f-3df61118d325.png)
+![image](https://user-images.githubusercontent.com/31242766/210068269-f0ece115-07c4-4dc5-9e81-21a961a6f0fe.png)
+
 3. 웹 브라우저를 통한 Application Load Balancer 작동 테스트
+![tempsnip](https://user-images.githubusercontent.com/31242766/210068493-e13e5a4d-b5a6-4ac6-9fb7-4e2d1ef67fb5.png)   
+![image](https://user-images.githubusercontent.com/31242766/210068532-9814e3c9-67f7-4fb0-ac20-98a621bf1a2e.png)
+![image](https://user-images.githubusercontent.com/31242766/210068559-91fb4099-c58f-4ae9-820d-4e38996a0822.png)
