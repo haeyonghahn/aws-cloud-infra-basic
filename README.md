@@ -466,8 +466,76 @@ Protocol과 Port는 Application Load Balancer와 타겟이 되는 EC2 인스턴�
 ### Bastion host와 NAT Gateway를 통한 Private EC2 인스턴스의 외부 통신 구성
 ![image](https://user-images.githubusercontent.com/31242766/209811046-a1fdafc9-b231-43f8-901b-3b9e5f7b9d0f.png)
 1. Private subnet에 EC2 생성
-2. Public subnet의 EC2를 통해 Private subnet의 EC2에 접속 (+ key pair 생성)
+- 이름 및 태그, 애플리케이션 및 OS 이미지(Amazon Machine Image)   
+![image](https://user-images.githubusercontent.com/31242766/210028802-e7d0dde6-85b0-475d-bfed-57b4053ad81b.png)   
+- 키 페어   
+![image](https://user-images.githubusercontent.com/31242766/210028972-c0dd76c0-50ef-472f-aeec-3292a1df66ac.png)   
+- 네트워크 설정   
+![image](https://user-images.githubusercontent.com/31242766/210029179-cd1f8cf0-c993-4b0d-9dc6-46359e3a63ab.png)   
+![image](https://user-images.githubusercontent.com/31242766/210029193-6f72f0d4-42a7-4746-8fc0-521f41b5a3d8.png)   
+- 스토리지 구성   
+![image](https://user-images.githubusercontent.com/31242766/210029221-e3797a1a-20f2-4d0c-a666-6857c0050f8e.png)   
+- 고급 세부 정보   
+![image](https://user-images.githubusercontent.com/31242766/210029353-43dc5e52-79ce-4761-9d57-3b7ca87201d5.png)   
+![image](https://user-images.githubusercontent.com/31242766/210029476-903f7277-e2e2-4396-888b-e1d10884b4bc.png)
+![image](https://user-images.githubusercontent.com/31242766/210029517-8a14b74e-66c6-4e82-a7fb-c04f30f1da5d.png)
+
+2. Public subnet의 EC2를 통해 Private subnet의 EC2에 접속 (+ key pair 생성)   
+`public-ec2-a1`을 통해서 `private-ec2-a1`에 접속해보자.   
+- `private-ec2-a1` 키 페어 파일을 `public-ec2-a1`에 편집기를 이용하여 생성   
+![image](https://user-images.githubusercontent.com/31242766/210034562-1a8e6dbc-3f2e-4241-bea9-805c095ab8e3.png)
+```linux
+[ec2-user@ip-10-1-1-143 ~]$ vi ec2-private-seoul.pem
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAjFRzIXJhJsOqP2BU85QFZKpX4ilbGdqPLJy1k2M6GI56fOvq
+aQETFjosvl1Ct8Yg8UpSEXW6UhhtCpuFquZVeAA2CsdfQoFeO9UDnFE+LFEN8y4b
+Yfyl52eWTP5LkFg3rCai9LWa5KW3EMwuEHzLHyX3eRpoLKfFBnkK7T/NmyzSzkY7
+PqxUw8S/pwzqTsbos14kgajkPphL5x4ohgai2n0VMBFY/hQO3dLfHPpHcIuspuyt
+BpmzJj1+6ma8aXIlceIDFbsZFuwcNk2Nk9ghq2Rb1ILx2bZ75aSJ9K4lUyotCrbO
++YsjCG2zW4rA2n12ZmNjM+ehUyQ+BDbT0V6otwIDAQABAoIBAE8ZZxAKVgKwte0l
+Up096VBVyFXd89D95khCSQM8IkonPZnerPHlPioAPqpLDUljb7wypVHcJ1sRE52w
+DkdHsBOFIvEucl6dZ02Yg4GANehrA874RU0VSTrHo+vgRx2k7DSoTqBbIWUSl77r
+KGf4v9Hd58GmhePt6Vv9rJAQr8dwRbFrhlSUDGYVz5XH/ktzWKrdc/UOHc2Vqs0v
+wSQTKnGF3AC+xYKgtBOUNOi8kCFC+fwUkToArB/fh6c8XNLWMQxQC8sI/btdt6Xx
+gosINhRpBfndqasbI7CwrT3AVtwHVDz7FYie/97tl1p9gnyZGNYoIJUp2G7i35wL
+IhkX63kCgYEAxwAmKLDkmVnEN5hkuyfN15MpY9QOTCXB/XPcbN6QL8jdyYsiSE4H
+fyRdyNz4YfspIrklml6RDf1GxBKjvBQ4MGxkPZHjNMlsHoPXd+/GiSPEb8J6lawh
+8gQCj/T8BmwuNPJCDpiVHKTSYKGLSJnAcuiGqS106/PCg4TYKaopUk0CgYEAtIY7
+diE9iq59UJXu0iKWt0jCaM13pbPfA8YdU99CvAXVD7zIDDVKRJZ3S1Atvj/+5eHX
+JC9s31cbHY/V4MzYMJ2eCWhIyiAyFY1rY2JsPvgv/lh1H0r+Cre19otyzeUzsrXl
+U0S3vCffxoMNGB6eOIScvLR/i6t90bTigaAIQRMCgYBA8NiDEO8Y6EVzSyUcOmof
+PqQUMuCTkwLSflvhn2P4ZBmUqvX+GJCzuh9s7EeWWgtbjIYr8U5u/Ud5twd92i9Y
+BhdUTGaUFGNXNfk756Cnomd5fULZ0zmkrBBWAEG6qtUNbD2IW9zVYyhQZod4osw9
+84n2baIpWfwRRWnxdtlTRQKBgEJ5r4m3gdcAnArBu1jL/d3uQBChoK53Bud327LX
+4tYj+6o45R2BviB1m+Yy1zVYkX+LY1Li19+CTuza23JVXELCt8BVE4DCzE6dbe8B
+/kRN1jZ90ls8nUHLFol8HkFtZlUnoBPCmToDIOcTuQ2psK+1PZZLjTAcbU98oXAE
+QyXbAoGAATP3s6D6ullxY7attcLpwHSotNo56YuEIbpKWU38JZBLrMw8bKORPBgX
+SxNygfmsq7RJvAfRCy1YFlq8VQHwOtXqERun7CrlVvOgohsdyHibpiKcQyHs3iyv
+v5gSJ8bCo55f3t2wmbSCeLzb7nvq6r7bBTvlXHj8zZdPNG2AB+I=
+-----END RSA PRIVATE KEY-----
+[ec2-user@ip-10-1-1-143 ~]$ chmod 400 ec2-private-seoul.pem
+[ec2-user@ip-10-1-1-143 ~]$ ssh -i ec2-private-seoul.pem ec2-user@private-ec2-a1인스턴스프라이빗IP주소
+The authenticity of host '10.1.3.149 (10.1.3.149)' can't be established.
+ECDSA key fingerprint is SHA256:5UTQVy4MCxottUBHeyFM8hABxmxqX6lfVhKZfU/JYPg.
+ECDSA key fingerprint is MD5:e6:96:25:f1:31:34:61:85:25:a9:1b:53:7c:6e:c7:a9.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.1.3.149' (ECDSA) to the list of known hosts.
+Last login: Thu Dec 29 07:33:04 2022 from 221.133.55.118
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-1-3-149 ~]$
+```
+`public-ec2-a1`은 `private-ec2-a1`에 접속하기 위한 중계 서버 역할을 하게 된다. 여기서 `public-ec2-a1`을 `Bestion 호스트`라고 부른다. 
+내부 네트워크와 외부 네트워크를 연결하는 일종의 게이트웨이 역할을 수행하는 의미를 가지고 있다. 
+`private-ec2-a1`은 외부 인터넷과 직접적인 통신이 불가하다. 하지만 private 네트워크라 하더라도 패키지 설치 등 등 다운로드가 필요한 경우가 생긴다. 
+이럴 땐 외부와 통신 경로가 필요하다. `NAT Gateway`를 사용해서 `private-ec2-a1`이 외부와 통신이 가능한 환경을 구성하자.
+
 3. NAT Gateway 생성
+
 4. Route table 설정
 5. Private subnet의 EC2의 외부 통신 테스트
 
