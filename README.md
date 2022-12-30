@@ -16,6 +16,10 @@
   * **[Application Load Balancer를 통한 이중화 네트워크 구성 (2)](#application-load-balancer를-통한-이중화-네트워크-구성-2)**
 * **[관계형 데이터베이스 서비스 구성](#관계형-데이터베이스-서비스-구성)**
   * **[아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토](#아키텍처-관련-기술서비스다이어그램구현-순서-검토-2)**
+  * **[Amazon RDS를 통한 MySQL 데이터베이스 이중화(Multi-AZ) 구성](#Amazon-RDS를-통한-MySQL-데이터베이스-이중화(Multi-AZ)-구성)**
+  * **[웹 서버와 데이터베이스 인스턴스 연결](#웹-서버와-데이터베이스-인스턴스-연결)**
+  * **[데이터베이스의 Read replica 생성 및 웹 서버 연결](#데이터베이스의-Read-replica-생성-및-웹-서버-연결)**
+  * **[Failover를 통한 데이터베이스 이중화 테스트](#Failover를-통한-데이터베이스-이중화-테스트)**
 
 ## EC2 Instance 접속을 위한 PuTTY 사용 방법
 Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프로그램이 필요한데 PuTTY라는 프로그램을 사용한다.
@@ -597,3 +601,38 @@ NAT 게이트웨이는 NAT(네트워크 주소 변환) 서비스이다. 프라�
 
 ## 관계형 데이터베이스 서비스 구성
 ### 아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토
+![image](https://user-images.githubusercontent.com/31242766/210069399-57983a97-8aca-4c5c-a9d9-7f36ec624793.png)
+
+### Amazon RDS를 통한 MySQL 데이터베이스 이중화(Multi-AZ) 구성
+1. RDS용 Security group 생성
+2. Subnet group 생성
+3. 복수의 가용역역에 MySQL 데이터베이스 생성(Multi-AZ Deployment)
+- DB Engine
+- DB Instance
+- Storage
+- Availability & Durability
+- Connectivity
+- Authentication
+- Backup 등
+4. 데이터베이스 정보 확인
+
+### 웹 서버와 데이터베이스 인스턴스 연결
+1. EC2-데이터베이스 연결을 위한 정보 구성
+- Endpoint
+- Master user
+- Master password 등
+2. 데이터베이스 접속
+3. 테이블 생성 및 데이터 입력
+4. 웹 브라우저를 통해 데이터베이스 연결 테스트
+
+### 데이터베이스의 Read replica 생성 및 웹 서버 연결
+1. 데이터베이스 Read Replica 생성
+2. EC2-Read Replica 데이터베이스 연결
+3. 웹 브라우저를 통해 Read Replica 데이터베이스 연결 테스트
+4. 원본 데이터베이스 변경 후 웹 브라우저를 통해 Read Replica 반영 테스트
+
+### Failover를 통한 데이터베이스 이중화 테스트
+1. Master/Standby 데이터베이스 IP 정보 확인
+2. Master 데이터베이스 Failover 테스트 (Reboot with Failover)
+3. Standby 데이터베이스가 Master 데이터베이스로 변경 확인
+4. 웹 브라우저를 통해 데이터베이스 연결 테스트
