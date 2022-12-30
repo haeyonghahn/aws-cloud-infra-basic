@@ -14,6 +14,8 @@
   * **[Application Load Balancer를 통한 이중화 네트워크 구성 (1)](#application-load-balancer를-통한-이중화-네트워크-구성-1)**
   * **[Bastion host와 NAT Gateway를 통한 Private EC2 인스턴스의 외부 통신 구성](#bastion-host와-nat-gateway를-통한-private-ec2-인스턴스의-외부-통신-구성)**
   * **[Application Load Balancer를 통한 이중화 네트워크 구성 (2)](#application-load-balancer를-통한-이중화-네트워크-구성-2)**
+* **[관계형 데이터베이스 서비스 구성](#관계형-데이터베이스-서비스-구성)**
+  * **[아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토](#아키텍처-관련-기술서비스다이어그램구현-순서-검토)**
 
 ## EC2 Instance 접속을 위한 PuTTY 사용 방법
 Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프로그램이 필요한데 PuTTY라는 프로그램을 사용한다.
@@ -592,3 +594,6 @@ NAT 게이트웨이는 NAT(네트워크 주소 변환) 서비스이다. 프라�
 ![tempsnip](https://user-images.githubusercontent.com/31242766/210068493-e13e5a4d-b5a6-4ac6-9fb7-4e2d1ef67fb5.png)   
 ![image](https://user-images.githubusercontent.com/31242766/210068532-9814e3c9-67f7-4fb0-ac20-98a621bf1a2e.png)
 ![image](https://user-images.githubusercontent.com/31242766/210068559-91fb4099-c58f-4ae9-820d-4e38996a0822.png)
+
+## 관계형 데이터베이스 서비스 구성
+### 아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토
