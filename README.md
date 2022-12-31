@@ -604,20 +604,32 @@ NAT 게이트웨이는 NAT(네트워크 주소 변환) 서비스이다. 프라�
 ![image](https://user-images.githubusercontent.com/31242766/210069399-57983a97-8aca-4c5c-a9d9-7f36ec624793.png)
 
 ### Amazon RDS를 통한 MySQL 데이터베이스 이중화(Multi-AZ) 구성
-1. RDS용 Security group 생성
+1. RDS용 Security group 생성   
+![image](https://user-images.githubusercontent.com/31242766/210070342-7241fd25-70c3-4c27-b851-0a49f285867c.png)   
+> 참고 : 인바운드 규칙 `소스`는 우리가 실습에서 사용하고 있는 `lab-vpc` 내에서 출발하는 트래픽이 데이터베이스 인스턴스가 
+> 인바운드를 허용하는 것으로 규칙을 정한다.
+
+![image](https://user-images.githubusercontent.com/31242766/210070365-ae8aadf5-a71e-4dd7-8304-c012717389cd.png)
+![image](https://user-images.githubusercontent.com/31242766/210070556-d8a6b254-2cdc-44f1-86e6-2c33401706a9.png)
+
 2. Subnet group 생성
+서브넷은 `private-subnet-a2`와 `private-subnet-c2`이다.
+![image](https://user-images.githubusercontent.com/31242766/210070808-a54a0cef-6933-47a9-a16b-a2da65db1ebf.png)
+
 3. 복수의 가용역역에 MySQL 데이터베이스 생성(Multi-AZ Deployment)
-- DB Engine
-- DB Instance
-- Storage
-- Availability & Durability
-- Connectivity
-- Authentication
-- Backup 등
+![image](https://user-images.githubusercontent.com/31242766/210071020-cf9cbfb2-d2cc-4222-818d-27bae2a6aaed.png)
+![image](https://user-images.githubusercontent.com/31242766/210071358-d16c7db1-bce5-4826-aea5-2f1ff1101e1c.png)
+![image](https://user-images.githubusercontent.com/31242766/210071444-9a4df3cc-fa5f-41c4-b79a-24aa68579a46.png)
+![image](https://user-images.githubusercontent.com/31242766/210071643-8f81e18f-5c43-4484-a01e-6be0274df9a4.png)
+![image](https://user-images.githubusercontent.com/31242766/210071736-6eb8c075-8e5a-417c-98ac-527810d03afb.png)
+![image](https://user-images.githubusercontent.com/31242766/210071948-87079d07-12b3-4d28-951b-081a935f65a9.png)
+![image](https://user-images.githubusercontent.com/31242766/210072040-fe20a9a0-800b-4482-800e-fd70de317be2.png)
+![image](https://user-images.githubusercontent.com/31242766/210072080-025580fe-31ea-441d-a710-fe28c993372d.png)
+
 4. 데이터베이스 정보 확인
 
 ### 웹 서버와 데이터베이스 인스턴스 연결
-1. EC2-데이터베이스 연결을 위한 정보 구성
+1. EC2-데이터베이스 연결을 위한 정보 구성   
 - Endpoint
 - Master user
 - Master password 등
