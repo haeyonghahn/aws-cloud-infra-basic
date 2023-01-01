@@ -24,7 +24,7 @@
   * **[아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토](#아키텍처-관련-기술서비스다이어그램구현-순서-검토-3)**
   * **[Auto Scaling을 위한 Launch Template 및 Application Load Balancer 구성](#Auto-Scaling을-위한-Launch-Template-및-Application-Load-Balancer-구성)**
   * **[Auto Scaling Group 및 Scaling Policy 구성](#Auto-Scaling-Group-및-Scaling-Policy-구성)**
-  * **[Auto Scaling Scale-Out 테스트](#Auto-Scaling-Scale---Out-테스트)**
+  * **[Auto Scaling Scale-Out 테스트](#auto-scaling-scale-out-테스트)**
   * **[Auto Scaling Scale-In 및 Termination policy 살펴보기](#Auto-Scaling-Scale-In-및-Termination-policy-살펴보기)**
 
 ## EC2 Instance 접속을 위한 PuTTY 사용 방법
