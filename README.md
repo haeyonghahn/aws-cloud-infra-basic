@@ -644,12 +644,126 @@ NAT 게이트웨이는 NAT(네트워크 주소 변환) 서비스이다. 프라�
 
 ### 웹 서버와 데이터베이스 인스턴스 연결
 1. EC2-데이터베이스 연결을 위한 정보 구성   
-- Endpoint
-- Master user
-- Master password 등
+EC2 인스턴스 위에 있는 `index.html` 파일에서는 `dbinfo.inc` 파일에서 데이터베이스 정보 파일을 가져온다. 그래서 
+`Private EC2`에 `dbinfo.inc` 파일을 생성하여 데이터베이스에 접속할 수 있도록 해보자.   
+- Private EC2 인스턴스 접속
+```linux
+Authenticating with public key "imported-openssh-key"
+Last login: Fri Dec 30 07:16:32 2022 from 59.29.153.216
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-1-1-143 ~]$ ls -la
+total 24
+drwx------ 3 ec2-user ec2-user  140 Dec 30 04:32 .
+drwxr-xr-x 3 root     root       22 Dec 29 06:38 ..
+-rw------- 1 ec2-user ec2-user  198 Dec 30 12:04 .bash_history
+-rw-r--r-- 1 ec2-user ec2-user   18 Jul 15  2020 .bash_logout
+-rw-r--r-- 1 ec2-user ec2-user  193 Jul 15  2020 .bash_profile
+-rw-r--r-- 1 ec2-user ec2-user  231 Jul 15  2020 .bashrc
+-r-------- 1 ec2-user ec2-user 1675 Dec 30 04:32 ec2-private-seoul.pem
+drwx------ 2 ec2-user ec2-user   48 Dec 30 04:34 .ssh
+-rw------- 1 ec2-user ec2-user  888 Dec 30 04:32 .viminfo
+[ec2-user@ip-10-1-1-143 ~]$ ssh -i ec2-private-seoul.pem ec2-user@10.1.3.149
+Last login: Fri Dec 30 07:29:12 2022 from ip-10-1-1-143.ap-northeast-2.compute.internal
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-1-3-149 ~]$ ls -la
+total 16
+drwx------ 3 ec2-user ec2-user  95 Dec 29 07:32 .
+drwxr-xr-x 3 root     root      22 Dec 29 06:38 ..
+-rw------- 1 ec2-user ec2-user  53 Dec 30 12:04 .bash_history
+-rw-r--r-- 1 ec2-user ec2-user  18 Jul 15  2020 .bash_logout
+-rw-r--r-- 1 ec2-user ec2-user 193 Jul 15  2020 .bash_profile
+-rw-r--r-- 1 ec2-user ec2-user 231 Jul 15  2020 .bashrc
+drwx------ 2 ec2-user ec2-user  29 Dec 29 06:38 .ssh
+[ec2-user@ip-10-1-3-149 ~]$
+```
+- dbinfo.inc 파일 생성
+![tempsnip](https://user-images.githubusercontent.com/31242766/210168123-12def847-1403-41c8-9c72-27c640f4b717.png)
+![tempsnip](https://user-images.githubusercontent.com/31242766/210168142-dbc92c3c-6c96-4993-8c1f-329b5dbbe7a9.png)
+```linux
+[ec2-user@ip-10-1-3-149 ~]$ sudo su
+[root@ip-10-1-3-149 ec2-user]# cd /var/www/html
+[root@ip-10-1-3-149 html]# vi dbinfo.inc
+<?php
+
+define('DB_SERVER', 'database-1.cdjhteq47z8s.ap-northeast-2.rds.amazonaws.com');
+define('DB_USERNAME', 'admin');
+define('DB_PASSWORD', 'qwer1234');
+define('DB_DATABASE', 'labvpcrds');
+
+?>
+```
+`private-subnet-c1`도 동일하게 진행한다.
+
+- 연결이 되었는지 확인   
+![image](https://user-images.githubusercontent.com/31242766/210168181-afc409d4-a548-4ca2-af30-e6d97fb1ffb9.png)
+![image](https://user-images.githubusercontent.com/31242766/210168190-fa9733ec-a464-4db4-a004-ae0e24341532.png)   
+`RDS Practice`에 접속 오류가 발생하지 않은 걸 확인해보면 정상적으로 연결된 것을 확인할 수 있다.
+
 2. 데이터베이스 접속
+- `private-ec2-a1`에 접속하여 해당 명령어 입력하여 접속
+```linux
+[ec2-user@ip-10-1-1-143 ~]$ ssh -i ec2-private-seoul.pem ec2-user@10.1.3.149
+Last login: Sun Jan  1 10:45:15 2023 from ip-10-1-1-143.ap-northeast-2.compute.internal
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-1-3-149 ~]$ cd /var/www/html
+[ec2-user@ip-10-1-3-149 html]$ mysql -h database-1.cdjhteq47z8s.ap-northeast-2.rds.amazonaws.com -P 3306 -u admin -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 658
+Server version: 8.0.28 Source distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [(none)]> use labvpcrds;
+```
+
 3. 테이블 생성 및 데이터 입력
+- 테이블 생성
+```linux
+MySQL [labvpcrds]> CREATE TABLE SAMPLE (
+    -> ID INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    -> NAME VARCHAR(45),
+    -> ADDRESS VARCHAR(90)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.14 sec)
+
+MySQL [labvpcrds]> show tables;
++---------------------+
+| Tables_in_labvpcrds |
++---------------------+
+| SAMPLE              |
++---------------------+
+1 row in set (0.00 sec)
+
+MySQL [labvpcrds]>
+```
+- 테이블 데이터 입력하기
+```linux
+MySQL [labvpcrds]> INSERT INTO SAMPLE (NAME, ADDRESS) VALUES ('KIM', 'SEOUL');
+Query OK, 1 row affected (0.02 sec)
+
+MySQL [labvpcrds]>
+```
+
 4. 웹 브라우저를 통해 데이터베이스 연결 테스트
+![image](https://user-images.githubusercontent.com/31242766/210168372-c62d711b-9306-4c94-bbc9-4b4a7054b929.png)
 
 ### 데이터베이스의 Read replica 생성 및 웹 서버 연결
 1. 데이터베이스 Read Replica 생성
