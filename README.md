@@ -763,13 +763,47 @@ MySQL [labvpcrds]>
 ```
 
 4. 웹 브라우저를 통해 데이터베이스 연결 테스트
+![image](https://user-images.githubusercontent.com/31242766/210169274-63eebbda-a52b-4a2e-824b-d175b77c79ed.png)
 ![image](https://user-images.githubusercontent.com/31242766/210168372-c62d711b-9306-4c94-bbc9-4b4a7054b929.png)
 
 ### 데이터베이스의 Read replica 생성 및 웹 서버 연결
 1. 데이터베이스 Read Replica 생성
-2. EC2-Read Replica 데이터베이스 연결
+![image](https://user-images.githubusercontent.com/31242766/210168508-8e348d6f-2f7a-410d-8fa2-5cc7df0ddf34.png)
+![image](https://user-images.githubusercontent.com/31242766/210168647-96f86015-fc81-4d9b-ad4d-66fbf5293309.png)    
+가용 영역은 Master DB가 생성되어 있는 `ap-northeast-2c`에 생성하도록 한다.   
+![image](https://user-images.githubusercontent.com/31242766/210168608-1916ba16-372c-49d8-b404-daa3b9b67e55.png)
+![image](https://user-images.githubusercontent.com/31242766/210168710-8ac4c5a2-f05f-400f-96a8-3b20fa56d190.png)
+
+2. EC2-Read Replica 데이터베이스 연결   
+이전에 만들었던 `dbinfo.inc` 파일의 db 엔드포인트를 `Read replica DB` 의 엔드포인트로 수정한다.   
+![image](https://user-images.githubusercontent.com/31242766/210169184-75e1691f-9ef6-4671-aff3-29aa677132ef.png)
+![image](https://user-images.githubusercontent.com/31242766/210169190-9369e844-358d-4cde-bf0a-8d121b6556a7.png)   
+- `private-ec2-c1`도 동일하게 진행한다.
+
 3. 웹 브라우저를 통해 Read Replica 데이터베이스 연결 테스트
-4. 원본 데이터베이스 변경 후 웹 브라우저를 통해 Read Replica 반영 테스트
+![image](https://user-images.githubusercontent.com/31242766/210169275-0230a982-997a-4ab0-878d-da491b29071e.png)
+![image](https://user-images.githubusercontent.com/31242766/210169259-f5a4f4f3-277f-4e4d-abbe-7d280324fa49.png)
+
+4. 원본 데이터베이스 변경 후 웹 브라우저를 통해 Read Replica 반영 테스트   
+원본 데이터가 변경되었을 때 `Read Replica DB`에도 반영이 되는지 테스트해본다. 
+`private-ec2-a1`으로 원본 DB에 접속하여 추가로 데이터를 입력해본다.
+```linux
+MySQL [labvpcrds]> INSERT INTO SAMPLE (NAME, ADDRESS) VALUES ('PARK', 'SUWON');
+Query OK, 1 row affected (0.02 sec)
+
+MySQL [labvpcrds]> SELECT * FROM SAMPLE;
++----+------+---------+
+| ID | NAME | ADDRESS |
++----+------+---------+
+|  1 | KIM  | SEOUL   |
+|  2 | PARK | SUWON   |
++----+------+---------+
+2 rows in set (0.01 sec)
+
+MySQL [labvpcrds]>
+```
+![image](https://user-images.githubusercontent.com/31242766/210169379-4b51271b-9798-4239-ae11-01ec22121092.png)   
+원본 DB에 변경된 데이터가 Read Replica DB에 정상적으로 반영이 되었고 Read Replica DB에 연결되어있는 웹 서버에 출력이 된 것을 확인할 수 있다.
 
 ### Failover를 통한 데이터베이스 이중화 테스트
 1. Master/Standby 데이터베이스 IP 정보 확인
