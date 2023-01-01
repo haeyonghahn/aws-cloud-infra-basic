@@ -807,6 +807,24 @@ MySQL [labvpcrds]>
 
 ### Failover를 통한 데이터베이스 이중화 테스트
 1. Master/Standby 데이터베이스 IP 정보 확인
+`private-ec2-a1`에 접속하여 현재 `Master DB` IP 정보를 확인해본다.     
+![tempsnip](https://user-images.githubusercontent.com/31242766/210170282-afa1e458-b202-4f3a-9b6f-6181d215b9db.png)   
+
+네트워크 인터페이스에서도 확인을 해본다.   
+![tempsnip](https://user-images.githubusercontent.com/31242766/210170327-34ce2e20-6a7d-4d1d-a76d-4464a23ab071.png)   
+체크 표시되어 있는 것이 `Master DB`이며 나머지는 `Read Replica DB`와 `StandBy DB` 이다. 
+
 2. Master 데이터베이스 Failover 테스트 (Reboot with Failover)
+![image](https://user-images.githubusercontent.com/31242766/210170424-0719d126-585e-4354-9e97-ebb583fa39c5.png)
+`장애 조치를 위해 재부팅하시겠습니까?` 체크 후 재부팅 이후에 사용 가능 상태로 될 때까지 기다리고 다시 Putty로 접속하여 IP정보를 확인해본다.
+
 3. Standby 데이터베이스가 Master 데이터베이스로 변경 확인
+![tempsnip](https://user-images.githubusercontent.com/31242766/210170541-ed7c2a24-0053-45ab-ad89-2d6407f8c94c.png)
+![image](https://user-images.githubusercontent.com/31242766/210170561-7520af51-d476-40cc-98c5-2b0bf6e7a019.png)
+이것이 의미하는 것은 가용 영역 `ap-northeast-2a`에 있었던 `Standby DB`가 이제 Master DB의 역할을 수행하게 되었고 기존 Master DB는 
+`Standby DB`가 된 것을 알 수 있다.
+
 4. 웹 브라우저를 통해 데이터베이스 연결 테스트
+![image](https://user-images.githubusercontent.com/31242766/210170619-310a875d-a382-4f7b-adae-2e5c6eceb6e1.png)
+![image](https://user-images.githubusercontent.com/31242766/210170625-afc4e4fe-a7ee-4f30-bcbb-a28e85d5ad87.png)
+
