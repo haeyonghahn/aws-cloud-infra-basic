@@ -20,6 +20,12 @@
   * **[웹 서버와 데이터베이스 인스턴스 연결](#웹-서버와-데이터베이스-인스턴스-연결)**
   * **[데이터베이스의 Read replica 생성 및 웹 서버 연결](#데이터베이스의-read-replica-생성-및-웹-서버-연결)**
   * **[Failover를 통한 데이터베이스 이중화 테스트](#failover를-통한-데이터베이스-이중화-테스트)**
+* **[Auto Scaling을 통한 확장성 및 탄력성 구현](#Auto Scaling을-통한-확장성-및-탄력성-구현)**
+  * **[아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토](#아키텍처-관련-기술서비스다이어그램구현-순서-검토)**
+  * **[Auto Scaling을 위한 Launch Template 및 Application Load Balancer 구성](#Auto-Scaling을-위한-Launch-Template-및-Application-Load-Balancer-구성)**
+  * **[Auto Scaling Group 및 Scaling Policy 구성](#Auto-Scaling-Group-및-Scaling-Policy-구성)**
+  * **[Auto Scaling Scale-Out 테스트](#Auto-Scaling-Scale---Out-테스트)**
+  * **[Auto Scaling Scale-In 및 Termination policy 살펴보기](#Auto-Scaling-Scale-In-및-Termination-policy-살펴보기)**
 
 ## EC2 Instance 접속을 위한 PuTTY 사용 방법
 Windows 환경에서 EC2에 SSH 접속을 하기 위해서 클라이언트 프로그램이 필요한데 PuTTY라는 프로그램을 사용한다.
@@ -828,3 +834,13 @@ MySQL [labvpcrds]>
 ![image](https://user-images.githubusercontent.com/31242766/210170619-310a875d-a382-4f7b-adae-2e5c6eceb6e1.png)
 ![image](https://user-images.githubusercontent.com/31242766/210170625-afc4e4fe-a7ee-4f30-bcbb-a28e85d5ad87.png)
 
+## Auto Scaling을 통한 확장성 및 탄력성 구현
+### 아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토
+
+### Auto Scaling을 위한 Launch Template 및 Application Load Balancer 구성
+
+### Auto Scaling Group 및 Scaling Policy 구성
+
+### Auto Scaling Scale-Out 테스트
+
+### Auto Scaling Scale-In 및 Termination policy 살펴보기
