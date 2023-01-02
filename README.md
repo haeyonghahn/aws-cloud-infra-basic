@@ -836,11 +836,43 @@ MySQL [labvpcrds]>
 
 ## Auto Scaling을 통한 확장성 및 탄력성 구현
 ### 아키텍처 관련 기술/서비스/다이어그램/구현 순서 검토
+가상 서버의 용량을 자동으로 증가 또는 축소하는 기능을 사용하여 인프라에 확장성과 탄력성을 구현한다. `Auto Scaling` 그룹을 생성하면서 `private-subnet`에 EC2 인스턴스가 새롭게 생성이 된다. `Auto Scaling`은 기준값, 정책을 설정하게 되는데 아키텍쳐에 보이는 것처럼 서버의 용량이 증가하게되는데 이러한 현상을 `Scale-out`이라고 한다. `Scale-out`이 되더라도 각 `private-subnet`에 위치한 웹 서버들은 어플리케이션 로드 밸런서를 통해 사용자의 요청을 수신하고 각 서버는 데이터베이스로부터 필요한 정보를 받아서 추가한 다음 요청에 대한 응답을 사용자에게 전달하게 된다.   
+![image](https://user-images.githubusercontent.com/31242766/210227823-40d0fb92-5c12-4716-a163-d4c736d1b4dc.png)
 
 ### Auto Scaling을 위한 Launch Template 및 Application Load Balancer 구성
+1. Private subnet의 EC2에 대한 Custom AMI 생성
+
+
+2. Auto Scaling을 위한 Launch Template 생성
+- AMI
+- Key pair
+- Network
+- Storage 등
+
+3. Auto Scaling용 Application Load Balancer 구성 (+ Target group)
 
 ### Auto Scaling Group 및 Scaling Policy 구성
+1. Auto Scaling Group 생성
+- Launch options
+- Group size
+- Load balancer
+- Tag 등
+
+2. Scaling Policy 구성
+
+3. 콘솔 및 웹 브라우저를 통해 Auto Scaling Group 시작 확인
 
 ### Auto Scaling Scale-Out 테스트
+1. Apache Bench Test를 위한 패키지(httpd-tools) 설치
+
+2. Application Load Balancer에 부하(로드) 테스트
+
+3. CloudWatch를 통해 CPU Utilization rate 증가 확인
+
+4. Scale-out으로 EC2 증가 확인
 
 ### Auto Scaling Scale-In 및 Termination policy 살펴보기
+1. Scale-in으로 EC2 감소 확인
+
+2. Auto Scaling Group의 Termination policy 확인
+
