@@ -886,14 +886,37 @@ MySQL [labvpcrds]>
 
 ### Auto Scaling Group 및 Scaling Policy 구성
 1. Auto Scaling Group 생성
-- Launch options
-- Group size
-- Load balancer
-- Tag 등
+- 시작 템플릿 또는 구성 선택   
+![image](https://user-images.githubusercontent.com/31242766/210316116-172d7f32-7e6d-4090-9ed2-2fc352283dab.png)
+![image](https://user-images.githubusercontent.com/31242766/210316433-e8dd50e5-953e-4807-a03c-611311a106e5.png)   
+`Launch Configuration`을 사용하려면 `시작 구성으로 전환`을 클릭하여 만들어둔 `Launch Configuration`을 클릭하여 진행한다.   
+- 인스턴스 시작 옵션 선택   
+![image](https://user-images.githubusercontent.com/31242766/210316664-687a6677-8661-412d-89cb-eb8103f68a16.png)
+- 고급 옵션 구성   
+![image](https://user-images.githubusercontent.com/31242766/210317084-29280be1-e375-479a-9065-f96a695ac515.png)
+![image](https://user-images.githubusercontent.com/31242766/210317123-53c7b840-40fa-487f-b9c9-515c5ce5af2a.png)
+- __(중요)__ 그룹 크기 및 크기 조정 정책 구성    
+  - 그룹 크기 : 인스턴스를 몇 개까지 확장할 것인지, 인스턴스를 몇 개까지 축소시킬 것인지 정하는 것
+    - 원하는 용량 : Auto Scaling 그룹이 트래킹 정책이나 EC2 인스턴스 상태에 따라서 활성화되길 원하는 EC2 인스턴스 수를 의미한다. 처음 Auto Scaling Group이 생성되는 시점에서는 
+    해당 부분이 초기에 생성되는 EC2 인스턴스의 수가 된다.
+    - 최소 용량 : 활성화될 수 있는 최소한의 EC2 인스턴스의 수이다. 해당 부분 아래 값으로는 EC2 인스턴스 수가 줄어들지 않는다.
+    - 최대 용량 : Auto Scaling 그룹에서 활성화될 수 있는 최대한의 EC2 인스턴스 수이다. EC2 인스턴스가 증가하더라도 해당 부분 값 이상으로는 증가하지 않는다.
+  - 크기 조정 정책 : Auto Scaling 그룹이 작동하게 되는 기준이다. 해당 정책에 따라 `scale-out`, `scale-in` 된다.
+    - 지표 유형 : Auto Scaling 을 작동하게 하는 기준이 되는 것
+    - 확대 정책만 생성하려면 축소 비활성화 : 매트릭 지표가 대상 값 아래로 내려서 scale-in이 될 때 auto scaling으로 생성된 인스턴스가 삭제되지 않도록 보호할 것인지 선택하는 옵션
+    이다.   
+  ![image](https://user-images.githubusercontent.com/31242766/210319815-89fd2bcc-67a8-42a9-9349-72989dd70d56.png)
+  ![image](https://user-images.githubusercontent.com/31242766/210319854-55ee0477-8595-4322-995a-1f9ca4ada5c8.png)     
+  - 알림 추가 : Auto Scaling Group에서 이벤트가 발생할 때 SNS(Simple Notification Service)를 통해서 알림을 받을 것인지 설정한다. (설정 안함)   
+  - 태그   
+  ![image](https://user-images.githubusercontent.com/31242766/210320239-972fd620-ea08-48b3-8352-45309ebae004.png)
 
-2. Scaling Policy 구성
-
-3. 콘솔 및 웹 브라우저를 통해 Auto Scaling Group 시작 확인
+2. 콘솔 및 웹 브라우저를 통해 Auto Scaling Group 시작 확인
+![image](https://user-images.githubusercontent.com/31242766/210321090-5b372b49-e239-4823-ab2f-c774717f1cb0.png)
+![image](https://user-images.githubusercontent.com/31242766/210321132-56d05a4b-ec37-493d-b075-c9425b4ba9a5.png)
+![image](https://user-images.githubusercontent.com/31242766/210321208-fb01fa13-9413-4f3f-93ed-b5c02877c854.png)
+![image](https://user-images.githubusercontent.com/31242766/210321257-a4464b87-b7ad-47d1-b9cd-662ce2cbe217.png)
+![image](https://user-images.githubusercontent.com/31242766/210321313-a242bde3-05be-4ccf-889d-c3a25f7644f4.png)
 
 ### Auto Scaling Scale-Out 테스트
 1. Apache Bench Test를 위한 패키지(httpd-tools) 설치
