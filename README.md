@@ -920,6 +920,7 @@ MySQL [labvpcrds]>
 
 ### Auto Scaling Scale-Out 테스트
 1. Apache Bench Test를 위한 패키지(httpd-tools) 설치
+`Apache Bench`는 부하 테스트를 위한 패키지이다.
 
 2. Application Load Balancer에 부하(로드) 테스트
 
@@ -931,4 +932,3 @@ MySQL [labvpcrds]>
 1. Scale-in으로 EC2 감소 확인
 
 2. Auto Scaling Group의 Termination policy 확인
-
