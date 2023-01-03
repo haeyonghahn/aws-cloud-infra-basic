@@ -841,15 +841,48 @@ MySQL [labvpcrds]>
 
 ### Auto Scaling을 위한 Launch Template 및 Application Load Balancer 구성
 1. Private subnet의 EC2에 대한 Custom AMI 생성
+![image](https://user-images.githubusercontent.com/31242766/210310611-3c19d605-15ee-4840-b886-c52155c20621.png)
+![image](https://user-images.githubusercontent.com/31242766/210310748-f33403b6-09df-4f77-9488-d4b0278c50f8.png)   
 
+앞으로의 실습에서 `private-ec2` 인스턴스는 사용하지 않기에 일단 중지시켜 놓는다.   
+![image](https://user-images.githubusercontent.com/31242766/210311172-2f161536-eeef-479d-9983-4d029bed8a8a.png)
 
 2. Auto Scaling을 위한 Launch Template 생성
-- AMI
-- Key pair
-- Network
-- Storage 등
+미리 설정한 구성값에 따라서 인스턴스를 생성해주는 기능으로 `Launch Configuration`, `Launch Template`을 제공해준다. `Launch Configuration`과 `Launch Template`은 비슷하지만 `Launch Template`이 더 상세한 설정을 할 수 있다. `Launch Configuration` 같은 경우는 설정 구성이 변경되면 새로운 `Launch Configuration`을 만들어 변경 사항을 적용시켜야 하지만 
+`Launch Template`같은 경우는 변경 사항이 적용되어 버전만 바뀐 동일한 템플릿을 그대로 사용할 수 있다. 이러한 이유에서도 AWS에서는 `Launch Configuration`보다 `Launch Template`을 사용하도록 권장하고 있다.   
+![image](https://user-images.githubusercontent.com/31242766/210312452-ddc636fb-49e6-4826-8c47-94a641fa7679.png)
+![image](https://user-images.githubusercontent.com/31242766/210312719-b9bbd874-81f9-4ffe-bb24-0e3b6d03a2f2.png)   
+- AMI   
+![image](https://user-images.githubusercontent.com/31242766/210312883-d2b9d4f3-6bf3-4375-9046-84ee0e4510b2.png)   
+- Key pair   
+`private-ec2-instance`의 AMI를 사용할 것이기 때문에 `private-ec2`의 key-pair를 사용하자.   
+![image](https://user-images.githubusercontent.com/31242766/210313045-3379a50d-d9bf-4985-95d1-00f3ee05d301.png)   
+- Network   
+서브넷 정보는 특정 서브넷으로 국한시키지 않을 것이기 때문에 `시작 템플릿에 포함하지 않음`을 선택한다.   
+![image](https://user-images.githubusercontent.com/31242766/210313288-e04552e5-ccd8-40fa-9daf-2d21b807dc55.png)   
+- Storage 등   
+![image](https://user-images.githubusercontent.com/31242766/210313343-c30fa42c-ce6d-4569-8a94-df08ed265a69.png)
+![image](https://user-images.githubusercontent.com/31242766/210313457-27350018-eccf-4d5a-b314-bb92a3db5a9a.png)
+![image](https://user-images.githubusercontent.com/31242766/210313498-a7fb2399-79eb-41c8-b21d-4327ac5f6aef.png)
+![image](https://user-images.githubusercontent.com/31242766/210313550-590300b4-7aac-4f8c-8b52-40dea4c0de78.png)   
+고급 세부 정보는 그대로 두고 진행한다. 맨 밑의 사용자 데이터는 `launch-template`에서 사용하는 Custom AMI에 LAMP 웹 서버와 관련된 패키지, 파일, 데이터베이스와 연결하기 위한 DB 정보들도 EBS 볼륨 스냅샷으로 기록이 되어 있기 때문에 사용자 데이터도 별도로 입력하지 않고 넘어간다.
 
 3. Auto Scaling용 Application Load Balancer 구성 (+ Target group)
+- Target Group 생성   
+![image](https://user-images.githubusercontent.com/31242766/210314293-9677fa12-22b5-4108-beec-23dd933bad4a.png)
+![image](https://user-images.githubusercontent.com/31242766/210314337-658cb595-2e95-4aed-a836-5886dd06e7c7.png)
+![image](https://user-images.githubusercontent.com/31242766/210314394-48bfbe2e-f7a8-41a3-bf27-37bb2f4c2510.png)
+![image](https://user-images.githubusercontent.com/31242766/210314594-2b4ce4a6-cd51-4515-9170-1446f3901fbd.png)   
+지금 만들고 있는 타겟 그룹은 인스턴스를 타겟으로 설정하지 않는다. 이 타겟 그룹은 Auto Scaling 그룹에 연결되는 어플리케이션 로드 밸런서에 타겟 그룹이기 때문에 Auto Scaling으로 생성되는 인스턴스들이 해당 타겟 그룹에 자동으로 등록된다.
+
+- Application Load Balancer 생성   
+![image](https://user-images.githubusercontent.com/31242766/210314973-a89259b7-1fac-4980-9bb2-8d47a5f0114a.png)
+![image](https://user-images.githubusercontent.com/31242766/210315057-78f71198-e49b-4672-8e3b-dbea67256749.png)
+![image](https://user-images.githubusercontent.com/31242766/210315267-efeef434-0d73-46a2-b819-36d962bd3629.png)
+![image](https://user-images.githubusercontent.com/31242766/210315304-c76ac0ce-15be-422c-afe1-20121eab0011.png)
+![image](https://user-images.githubusercontent.com/31242766/210315379-49cfdbf8-92e8-4813-8116-e66b51e5977e.png)
+![image](https://user-images.githubusercontent.com/31242766/210315453-089618db-dd6b-4c33-a797-aa0d694091ff.png)
+![image](https://user-images.githubusercontent.com/31242766/210315508-b118d606-5b80-4c38-a373-3c4886824ecd.png)
 
 ### Auto Scaling Group 및 Scaling Policy 구성
 1. Auto Scaling Group 생성
