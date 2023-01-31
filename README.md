@@ -1,4 +1,5 @@
 # aws-cloud-infra-basic
+해당 문서 출처는 [스스로 구축하는 AWS 클라우드 인프라 - 기본편](https://www.inflearn.com/course/aws-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C-%EC%9D%B8%ED%94%84%EB%9D%BC-%EA%B8%B0%EB%B3%B8) 로 작성되었습니다.
 ## 목차
 * **[EC2 Instance 접속을 위한 PuTTY 사용 방법](#EC2-Instance-접속을-위한-PuTTY-사용-방법)**
 * **[서버리스 정적 웹사이트 호스팅 및 성능 가속화](#서버리스-정적-웹사이트-호스팅-및-성능-가속화)**
